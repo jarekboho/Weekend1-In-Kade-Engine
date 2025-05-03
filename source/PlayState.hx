@@ -827,6 +827,12 @@ add(groupBlazin);
 
 		if (curSong.toLowerCase() == '2hot')
 		{
+		var casing:CasingSprite = new CasingSprite();
+		casing.x = boyfriend.x + 250;
+		casing.y = boyfriend.y + 100;
+		add(casing);
+		casing.alpha = 0.00000001;
+
 		var picoDeathExplosion:FlxAnimate = new FlxAnimate();
 		Paths.loadAnimateAtlas(picoDeathExplosion, "picoExplosionDeath");
 		picoDeathExplosion.screenCenter();
