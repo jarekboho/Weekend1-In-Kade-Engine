@@ -674,7 +674,6 @@ class PlayState extends MusicBeatState
 				boyfriend.y = 1228 - boyfriend.characterOrigin.y + boyfriend.globalOffsets[1];
 				dad.x = 920 - dad.characterOrigin.x + dad.globalOffsets[0];
 				dad.y = 1310 - dad.characterOrigin.y + dad.globalOffsets[1];
-				gf.globalOffsets[1] = -100;
 				gf.x = 1453 - gf.characterOrigin.x + gf.globalOffsets[0];
 				gf.y = 1100 - gf.characterOrigin.y + gf.globalOffsets[1];
 				var dadCenterX = dad.x + dad.width / 2;
@@ -685,7 +684,6 @@ class PlayState extends MusicBeatState
 				boyfriend.y = 100 - boyfriend.characterOrigin.y;
 				dad.x = -237 - dad.characterOrigin.x;
 				dad.y = 150 - dad.characterOrigin.y;
-				gf.globalOffsets[1] = -100;
 				gf.x = 1353 - gf.characterOrigin.x + gf.globalOffsets[0];
 				gf.y = 1125 - gf.characterOrigin.y + gf.globalOffsets[1];
 				camPos.set(1403, 717);
