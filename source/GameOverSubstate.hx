@@ -43,7 +43,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		if(daStage != 'phillyBlazin')
 		{
-		bf = new Boyfriend(1925, 753, daBf);
+		bf = new Boyfriend(x, y, daBf);
 		add(bf);
 
 		bf.updateHitbox();
