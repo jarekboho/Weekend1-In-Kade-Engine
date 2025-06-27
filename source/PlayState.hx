@@ -2172,12 +2172,12 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 			isPlayerDying = true;
 			new FlxTimer().start(0.125, function(tmr)
 			{
-			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+			openSubState(new GameOverSubstate(boyfriend.x, boyfriend.y));
 			});
 			}
 			}
 			else
-			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+			openSubState(new GameOverSubstate(boyfriend.x, boyfriend.y));
 
 			#if windows
 			DiscordClient.changePresence("GAME OVER -- " + SONG.song + " (" + storyDifficultyText + ") " + generateRanking(),"\nAcc: " + truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
