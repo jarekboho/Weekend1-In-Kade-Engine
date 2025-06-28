@@ -1,4 +1,3 @@
-
 package;
 
 import flixel.system.FlxAssets.FlxShader;
@@ -455,6 +454,7 @@ class RainShader extends FlxShader
 		this.uPuddleScaleY.value = [0.0];
 		this.numLights.value = [0];
 		this.uScreenResolution.value = [FlxG.width, FlxG.height];
+		this.uCameraBounds.value = [0, 0, FlxG.width, FlxG.height];
 	}
 
 	public function update(elapsed:Float):Void
