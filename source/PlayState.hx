@@ -58,6 +58,7 @@ import flxanimate.FlxAnimate;
 import flixel.effects.FlxFlicker;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import flixel.group.FlxSpriteGroup;
+import Song.SongEventData;
 
 #if windows
 import Discord.DiscordClient;
@@ -122,7 +123,6 @@ class PlayState extends MusicBeatState
 	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
 	private var playerStrums:FlxSpriteGroup;
 
-	private var camZooming:Bool = false;
 	private var curSong:String = "";
 
 	private var gfSpeed:Int = 1;
@@ -205,8 +205,6 @@ class PlayState extends MusicBeatState
 
 	public static var campaignScore:Int = 0;
 
-	var defaultCamZoom:Float = 1.05;
-
 	public static var theFunne:Bool = true;
 	var funneEffect:FlxSprite;
 	var inCutscene:Bool = false;
@@ -224,6 +222,28 @@ class PlayState extends MusicBeatState
 	private var executeModchart = false;
 		
 	public static var lua:State = null;
+
+	var songEvents:Array<SongEventData> = [];
+
+	var cameraSpeed:Float = 0;
+
+	var cameraFollowTween:FlxTween;
+
+	var cameraZoomTween:FlxTween;
+
+	var stageZoom:Float;
+
+	var currentCameraZoom:Float = FlxCamera.defaultZoom;
+
+	var cameraBopMultiplier:Float = 1.0;
+
+	var defaultHUDCameraZoom:Float = FlxCamera.defaultZoom * 1.0;
+
+	var cameraBopIntensity:Float = 1.015;
+
+	var hudCameraZoomIntensity:Float = 0.015 * 2.0;
+
+	var cameraZoomRate:Int = 4;
 
 	function callLua(func_name : String, args : Array<Dynamic>, ?type : String) : Dynamic
 	{
@@ -482,151 +502,149 @@ class PlayState extends MusicBeatState
 		{
 			case 'darnell' | 'lit-up' | '2hot':
 			{
-					curStage = 'phillyStreets';
-					defaultCamZoom = 0.77;
+			curStage = 'phillyStreets';
+			currentCameraZoom = 0.77;
 
-		scrollingSky = new FlxTiledSprite(Paths.image('phillyStreets/phillySkybox', 'weekend1'), 2922, 718, true, false);
-		scrollingSky.setPosition(-650, -375);
-		scrollingSky.scrollFactor.set(0.1, 0.1);
-		scrollingSky.scale.set(0.65, 0.65);
+			scrollingSky = new FlxTiledSprite(Paths.image('phillyStreets/phillySkybox', 'weekend1'), 2922, 718, true, false);
+			scrollingSky.setPosition(-650, -375);
+			scrollingSky.scrollFactor.set(0.1, 0.1);
+			scrollingSky.scale.set(0.65, 0.65);
+			add(scrollingSky);
 
-		add(scrollingSky);
+			var phillySkyline = new FlxSprite(-545, -273).loadGraphic(Paths.image("phillyStreets/phillySkyline", 'weekend1'));
+			phillySkyline.scrollFactor.set(0.2, 0.2);
+			phillySkyline.antialiasing = true;
+			add(phillySkyline);
 
-		var phillySkyline = new FlxSprite(-545, -273).loadGraphic(Paths.image("phillyStreets/phillySkyline", 'weekend1'));
-		phillySkyline.scrollFactor.set(0.2, 0.2);
-		phillySkyline.antialiasing = true;
-		add(phillySkyline);
+			var phillyForegroundCity = new FlxSprite(625, 94).loadGraphic(Paths.image("phillyStreets/phillyForegroundCity", 'weekend1'));
+			phillyForegroundCity.scrollFactor.set(0.3, 0.3);
+			phillyForegroundCity.antialiasing = true;
+			add(phillyForegroundCity);
 
-		var phillyForegroundCity = new FlxSprite(625, 94).loadGraphic(Paths.image("phillyStreets/phillyForegroundCity", 'weekend1'));
-		phillyForegroundCity.scrollFactor.set(0.3, 0.3);
-		phillyForegroundCity.antialiasing = true;
-		add(phillyForegroundCity);
+			var phillyConstruction = new FlxSprite(1800, 364).loadGraphic(Paths.image("phillyStreets/phillyConstruction", 'weekend1'));
+			phillyConstruction.scrollFactor.set(0.7, 1);
+			phillyConstruction.antialiasing = true;
+			add(phillyConstruction);
 
-		var phillyConstruction = new FlxSprite(1800, 364).loadGraphic(Paths.image("phillyStreets/phillyConstruction", 'weekend1'));
-		phillyConstruction.scrollFactor.set(0.7, 1);
-		phillyConstruction.antialiasing = true;
-		add(phillyConstruction);
+			var phillyHighwayLights = new FlxSprite(284, 305).loadGraphic(Paths.image("phillyStreets/phillyHighwayLights", 'weekend1'));
+			phillyHighwayLights.scrollFactor.set(1, 1);
+			phillyHighwayLights.antialiasing = true;
+			add(phillyHighwayLights);
 
-		var phillyHighwayLights = new FlxSprite(284, 305).loadGraphic(Paths.image("phillyStreets/phillyHighwayLights", 'weekend1'));
-		phillyHighwayLights.scrollFactor.set(1, 1);
-		phillyHighwayLights.antialiasing = true;
-		add(phillyHighwayLights);
+			var phillyHighwayLights_lightmap = new FlxSprite(284, 305).loadGraphic(Paths.image("phillyStreets/phillyHighwayLights_lightmap", 'weekend1'));
+			phillyHighwayLights_lightmap.scrollFactor.set(1, 1);
+			phillyHighwayLights_lightmap.antialiasing = true;
+			phillyHighwayLights_lightmap.blend = ADD;
+			phillyHighwayLights_lightmap.alpha = 0.6;
+			add(phillyHighwayLights_lightmap);
 
-		var phillyHighwayLights_lightmap = new FlxSprite(284, 305).loadGraphic(Paths.image("phillyStreets/phillyHighwayLights_lightmap", 'weekend1'));
-		phillyHighwayLights_lightmap.scrollFactor.set(1, 1);
-		phillyHighwayLights_lightmap.antialiasing = true;
-		phillyHighwayLights_lightmap.blend = ADD;
-		phillyHighwayLights_lightmap.alpha = 0.6;
-		add(phillyHighwayLights_lightmap);
+			var phillyHighway = new FlxSprite(139, 209).loadGraphic(Paths.image("phillyStreets/phillyHighway", 'weekend1'));
+			phillyHighway.scrollFactor.set(1, 1);
+			phillyHighway.antialiasing = true;
+			add(phillyHighway);
 
-		var phillyHighway = new FlxSprite(139, 209).loadGraphic(Paths.image("phillyStreets/phillyHighway", 'weekend1'));
-		phillyHighway.scrollFactor.set(1, 1);
-		phillyHighway.antialiasing = true;
-		add(phillyHighway);
+			var phillySmog = new FlxSprite(-6, 245).loadGraphic(Paths.image("phillyStreets/phillySmog", 'weekend1'));
+			phillySmog.scrollFactor.set(0.8, 1);
+			phillySmog.antialiasing = true;
+			add(phillySmog);
 
-		var phillySmog = new FlxSprite(-6, 245).loadGraphic(Paths.image("phillyStreets/phillySmog", 'weekend1'));
-		phillySmog.scrollFactor.set(0.8, 1);
-		phillySmog.antialiasing = true;
-		add(phillySmog);
+			phillyCars = new FlxSprite(1748, 818);
+			phillyCars.frames = Paths.getSparrowAtlas("phillyStreets/phillyCars", 'weekend1');
+			phillyCars.scrollFactor.set(0.9, 1);
+			phillyCars.antialiasing = true;
+			phillyCars.animation.addByPrefix("car1", "car1", 0, false);
+			phillyCars.animation.addByPrefix("car2", "car2", 0, false);
+			phillyCars.animation.addByPrefix("car3", "car3", 0, false);
+			phillyCars.animation.addByPrefix("car4", "car4", 0, false);
+			add(phillyCars);
 
-		phillyCars = new FlxSprite(1748, 818);
-		phillyCars.frames = Paths.getSparrowAtlas("phillyStreets/phillyCars", 'weekend1');
-		phillyCars.scrollFactor.set(0.9, 1);
-		phillyCars.antialiasing = true;
-		phillyCars.animation.addByPrefix("car1", "car1", 0, false);
-		phillyCars.animation.addByPrefix("car2", "car2", 0, false);
-		phillyCars.animation.addByPrefix("car3", "car3", 0, false);
-		phillyCars.animation.addByPrefix("car4", "car4", 0, false);
-		add(phillyCars);
+			phillyCars2 = new FlxSprite(1748, 818);
+			phillyCars2.frames = Paths.getSparrowAtlas("phillyStreets/phillyCars", 'weekend1');
+			phillyCars2.scrollFactor.set(0.9, 1);
+			phillyCars2.antialiasing = true;
+			phillyCars2.flipX = true;
+			phillyCars2.animation.addByPrefix("car1", "car1", 0, false);
+			phillyCars2.animation.addByPrefix("car2", "car2", 0, false);
+			phillyCars2.animation.addByPrefix("car3", "car3", 0, false);
+			phillyCars2.animation.addByPrefix("car4", "car4", 0, false);
+			add(phillyCars2);
 
-		phillyCars2 = new FlxSprite(1748, 818);
-		phillyCars2.frames = Paths.getSparrowAtlas("phillyStreets/phillyCars", 'weekend1');
-		phillyCars2.scrollFactor.set(0.9, 1);
-		phillyCars2.antialiasing = true;
-		phillyCars2.flipX = true;
-		phillyCars2.animation.addByPrefix("car1", "car1", 0, false);
-		phillyCars2.animation.addByPrefix("car2", "car2", 0, false);
-		phillyCars2.animation.addByPrefix("car3", "car3", 0, false);
-		phillyCars2.animation.addByPrefix("car4", "car4", 0, false);
-		add(phillyCars2);
+			phillyTraffic = new FlxSprite(1840, 608);
+			phillyTraffic.frames = Paths.getSparrowAtlas("phillyStreets/phillyTraffic", 'weekend1');
+			phillyTraffic.scrollFactor.set(0.9, 1);
+			phillyTraffic.antialiasing = true;
+			phillyTraffic.animation.addByPrefix("togreen", "redtogreen", 24, false);
+			phillyTraffic.animation.addByPrefix("tored", "greentored", 24, false);
+			add(phillyTraffic);
 
-		phillyTraffic = new FlxSprite(1840, 608);
-		phillyTraffic.frames = Paths.getSparrowAtlas("phillyStreets/phillyTraffic", 'weekend1');
-		phillyTraffic.scrollFactor.set(0.9, 1);
-		phillyTraffic.antialiasing = true;
-		phillyTraffic.animation.addByPrefix("togreen", "redtogreen", 24, false);
-		phillyTraffic.animation.addByPrefix("tored", "greentored", 24, false);
-		add(phillyTraffic);
+			var phillyHighwayLights_lightmap = new FlxSprite(1840, 608).loadGraphic(Paths.image("phillyStreets/phillyTraffic_lightmap", 'weekend1'));
+			phillyHighwayLights_lightmap.scrollFactor.set(0.9, 1);
+			phillyHighwayLights_lightmap.antialiasing = true;
+			phillyHighwayLights_lightmap.blend = ADD;
+			phillyHighwayLights_lightmap.alpha = 0.6;
+			add(phillyHighwayLights_lightmap);
 
-		var phillyHighwayLights_lightmap = new FlxSprite(1840, 608).loadGraphic(Paths.image("phillyStreets/phillyTraffic_lightmap", 'weekend1'));
-		phillyHighwayLights_lightmap.scrollFactor.set(0.9, 1);
-		phillyHighwayLights_lightmap.antialiasing = true;
-		phillyHighwayLights_lightmap.blend = ADD;
-		phillyHighwayLights_lightmap.alpha = 0.6;
-		add(phillyHighwayLights_lightmap);
+			var phillyForeground = new FlxSprite(88, 317).loadGraphic(Paths.image("phillyStreets/phillyForeground", 'weekend1'));
+			phillyForeground.antialiasing = true;
+			add(phillyForeground);
 
-		var phillyForeground = new FlxSprite(88, 317).loadGraphic(Paths.image("phillyStreets/phillyForeground", 'weekend1'));
-		phillyForeground.antialiasing = true;
-		add(phillyForeground);
-
-		resetCar(true, true);
+			resetCar(true, true);
 
 			setupRainShader();
 			}
 			case 'blazin':
 			{
-					curStage = 'phillyBlazin';
-					defaultCamZoom = 0.75;
+			curStage = 'phillyBlazin';
+			currentCameraZoom = 0.75;
 
-		scrollingSky = new FlxTiledSprite(Paths.image('phillyBlazin/skyBlur', 'weekend1'), 2000, 359, true, false);
-		scrollingSky.setPosition(-500, -120);
-		scrollingSky.scrollFactor.set(0, 0);
+			scrollingSky = new FlxTiledSprite(Paths.image('phillyBlazin/skyBlur', 'weekend1'), 2000, 359, true, false);
+			scrollingSky.setPosition(-500, -120);
+			scrollingSky.scrollFactor.set(0, 0);
+			add(scrollingSky);
 
-		add(scrollingSky);
+			skyAdditive = new FlxSprite(-600, -175).loadGraphic(Paths.image("phillyBlazin/skyBlur", 'weekend1'));
+			skyAdditive.scrollFactor.set(0, 0);
+			skyAdditive.scale.set(1.75, 1.75);
+			add(skyAdditive);
+			skyAdditive.blend = ADD;
+			skyAdditive.visible = false;
 
-		skyAdditive = new FlxSprite(-600, -175).loadGraphic(Paths.image("phillyBlazin/skyBlur", 'weekend1'));
-		skyAdditive.scrollFactor.set(0, 0);
-		skyAdditive.scale.set(1.75, 1.75);
-		add(skyAdditive);
-		skyAdditive.blend = ADD;
-		skyAdditive.visible = false;
+			lightning = new FlxSprite(50, -300);
+			lightning.frames = Paths.getSparrowAtlas("phillyBlazin/lightning", 'weekend1');
+			lightning.animation.addByPrefix('strike', "lightning", 24, false);
+			lightning.scrollFactor.set(0, 0);
+			lightning.scale.set(1.75, 1.75);
+			lightning.updateHitbox();
+			add(lightning);
+			lightning.visible = false;
 
-		lightning = new FlxSprite(50, -300);
-		lightning.frames = Paths.getSparrowAtlas("phillyBlazin/lightning", 'weekend1');
-		lightning.animation.addByPrefix('strike', "lightning", 24, false);
-		lightning.scrollFactor.set(0, 0);
-		lightning.scale.set(1.75, 1.75);
-		lightning.updateHitbox();
-		add(lightning);
-		lightning.visible = false;
+			var phillyForegroundCity = new FlxSprite(-600, -175).loadGraphic(Paths.image("phillyBlazin/streetBlur", 'weekend1'));
+			phillyForegroundCity.scrollFactor.set(0, 0);
+			phillyForegroundCity.scale.set(1.75, 1.75);
+			phillyForegroundCity.updateHitbox();
+			add(phillyForegroundCity);
 
-		var phillyForegroundCity = new FlxSprite(-600, -175).loadGraphic(Paths.image("phillyBlazin/streetBlur", 'weekend1'));
-		phillyForegroundCity.scrollFactor.set(0, 0);
-		phillyForegroundCity.scale.set(1.75, 1.75);
-		phillyForegroundCity.updateHitbox();
-		add(phillyForegroundCity);
+			foregroundMultiply = new FlxSprite(-600, -175).loadGraphic(Paths.image("phillyBlazin/streetBlur", 'weekend1'));
+			foregroundMultiply.scrollFactor.set(0, 0);
+			foregroundMultiply.scale.set(1.75, 1.75);
+			foregroundMultiply.updateHitbox();
+			add(foregroundMultiply);
+			foregroundMultiply.blend = MULTIPLY;
+			foregroundMultiply.visible = false;
 
-		foregroundMultiply = new FlxSprite(-600, -175).loadGraphic(Paths.image("phillyBlazin/streetBlur", 'weekend1'));
-		foregroundMultiply.scrollFactor.set(0, 0);
-		foregroundMultiply.scale.set(1.75, 1.75);
-		foregroundMultiply.updateHitbox();
-		add(foregroundMultiply);
-		foregroundMultiply.blend = MULTIPLY;
-		foregroundMultiply.visible = false;
-
-		additionalLighten = new FlxSprite(-600, -175).makeGraphic(1, 1, 0xFFFFFFFF);
-		additionalLighten.scrollFactor.set(0, 0);
-		additionalLighten.scale.set(2500, 2500);
-		additionalLighten.updateHitbox();
-		add(additionalLighten);
-		additionalLighten.blend = ADD;
-		additionalLighten.visible = false;
+			additionalLighten = new FlxSprite(-600, -175).makeGraphic(1, 1, 0xFFFFFFFF);
+			additionalLighten.scrollFactor.set(0, 0);
+			additionalLighten.scale.set(2500, 2500);
+			additionalLighten.updateHitbox();
+			add(additionalLighten);
+			additionalLighten.blend = ADD;
+			additionalLighten.visible = false;
 
 			setupRainShader();
 			}
 			default:
 			{
-					defaultCamZoom = 0.9;
+					currentCameraZoom = 0.9;
 					curStage = 'stage';
 					var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
 					bg.antialiasing = true;
@@ -652,14 +670,14 @@ class PlayState extends MusicBeatState
 					add(stageCurtains);
 			}
 		}
+		stageZoom = currentCameraZoom;
+
 		var gfVersion:String = 'nene';
 
 		gf = new Character(400, 130, gfVersion);
 		gf.scrollFactor.set(1, 1);
 
 		dad = new Character(100, 100, SONG.player2);
-
-		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 		
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
 
@@ -676,9 +694,6 @@ class PlayState extends MusicBeatState
 				dad.y = 1310 - dad.characterOrigin.y + dad.globalOffsets[1];
 				gf.x = 1453 - gf.characterOrigin.x + gf.globalOffsets[0];
 				gf.y = 1100 - gf.characterOrigin.y + gf.globalOffsets[1];
-				var dadCenterX = dad.x + dad.width / 2;
-				var dadCenterY = dad.y + dad.height / 2;
-				camPos.set(dadCenterX + 500, dadCenterY + -100);
 			case 'phillyBlazin':
 				boyfriend.x = -237 - boyfriend.characterOrigin.x;
 				boyfriend.y = 100 - boyfriend.characterOrigin.y;
@@ -686,8 +701,31 @@ class PlayState extends MusicBeatState
 				dad.y = 150 - dad.characterOrigin.y;
 				gf.x = 1353 - gf.characterOrigin.x + gf.globalOffsets[0];
 				gf.y = 1125 - gf.characterOrigin.y + gf.globalOffsets[1];
-				camPos.set(1403, 717);
 		}
+
+		boyfriend.resetCameraFocusPoint();
+		dad.resetCameraFocusPoint();
+		gf.resetCameraFocusPoint();
+
+		switch (curStage)
+		{
+			case 'phillyStreets':
+				boyfriend.cameraFocusPoint.x += -350;
+				boyfriend.cameraFocusPoint.y += -100;
+				dad.cameraFocusPoint.x += 500;
+				dad.cameraFocusPoint.y += -100;
+				gf.cameraFocusPoint.x += 0;
+				gf.cameraFocusPoint.y += 0;
+			case 'phillyBlazin':
+				boyfriend.cameraFocusPoint.x += -350;
+				boyfriend.cameraFocusPoint.y += -100;
+				dad.cameraFocusPoint.x += 500;
+				dad.cameraFocusPoint.y += 200;
+				gf.cameraFocusPoint.x += 0;
+				gf.cameraFocusPoint.y += 20;
+		}
+
+		var camPos:FlxPoint = new FlxPoint(dad.cameraFocusPoint.x, dad.cameraFocusPoint.y);
 
 		switch (curStage)
 		{
@@ -702,10 +740,11 @@ class PlayState extends MusicBeatState
 				abot.eyes.anim.curFrame = abot.eyes.anim.length - 1;
 				add(abot);
 
-			boyfriend.color = 0xFFDEDEDE;
-			dad.color = 0xFFDEDEDE;
-			gf.color = 0xFF888888;
-			abot.speaker.color = 0xFF888888;
+				boyfriend.color = 0xFFDEDEDE;
+				dad.color = 0xFFDEDEDE;
+				gf.color = 0xFF888888;
+				abot.speaker.color = 0xFF888888;
+				camPos.set(gf.cameraFocusPoint.x + 50, gf.cameraFocusPoint.y - 90);
 		}
 
 		add(gf);
@@ -869,8 +908,9 @@ add(groupBlazin);
 
 		add(camFollow);
 
-		FlxG.camera.follow(camFollow, LOCKON, 0.04 * (30 / (cast (Lib.current.getChildAt(0), Main)).getFPS()));
-		FlxG.camera.zoom = defaultCamZoom;
+		cameraSpeed = 0.04 * (30 / (cast (Lib.current.getChildAt(0), Main)).getFPS());
+		FlxG.camera.follow(camFollow, LOCKON, cameraSpeed);
+		FlxG.camera.zoom = currentCameraZoom;
 		FlxG.camera.focusOn(camFollow.getPosition());
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
@@ -1497,6 +1537,17 @@ add(groupBlazin);
 
 		unspawnNotes.sort(sortByShit);
 
+		if(SONG.events != null && SONG.events.length > 0)
+		{
+		for (i in 0...SONG.events.length)
+		{
+		var time = SONG.events[i].t;
+		var eventKind = SONG.events[i].e;
+		var value = SONG.events[i].v;
+		songEvents.push(new SongEventData(time,eventKind,value));
+		}
+		}
+
 		generatedMusic = true;
 	}
 
@@ -1593,6 +1644,16 @@ add(groupBlazin);
 			#end
 			if (!startTimer.finished)
 				startTimer.active = false;
+
+			if (cameraFollowTween != null)
+			{
+			cameraFollowTween.active = false;
+			}
+
+			if (cameraZoomTween != null)
+			{
+			cameraZoomTween.active = false;
+			}
 		}
 
 		super.openSubState(SubState);
@@ -1610,6 +1671,16 @@ add(groupBlazin);
 			if (!startTimer.finished)
 				startTimer.active = true;
 			paused = false;
+
+			if (cameraFollowTween != null)
+			{
+			cameraFollowTween.active = true;
+			}
+
+			if (cameraZoomTween != null)
+			{
+			cameraZoomTween.active = true;
+			}
 
 			if (curStage == 'phillyStreets')
 			{
@@ -1763,11 +1834,9 @@ add(groupBlazin);
     return lerp * (FlxG.elapsed / (1 / 60));
   }
 
-	var isCameraOnForcedPos:Bool = false;
-
 	var hasHidden = false;
 
-  public var isPlayerDying:Bool = false;
+	var isPlayerDying:Bool = false;
 
 	override public function update(elapsed:Float)
 	{
@@ -1919,25 +1988,25 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 		}
 
 			case 'phillyBlazin':
-		if(scrollingSky != null) scrollingSky.scrollX -= FlxG.elapsed * 35;
+			if(scrollingSky != null) scrollingSky.scrollX -= FlxG.elapsed * 35;
 
-		if(rainShader != null)
-		{
-			rainShader.updateViewInfo(FlxG.width, FlxG.height, FlxG.camera);
-			rainShader.update(elapsed * rainTimeScale);
-			rainTimeScale = coolLerp(rainTimeScale, 0.02, 0.05);
-		}
+			if(rainShader != null)
+			{
+				rainShader.updateViewInfo(FlxG.width, FlxG.height, FlxG.camera);
+				rainShader.update(elapsed * rainTimeScale);
+				rainTimeScale = coolLerp(rainTimeScale, 0.02, 0.05);
+			}
 
-		if (lightningActive) {
-			lightningTimer -= FlxG.elapsed;
-		} else {
-			lightningTimer = 1;
-		}
+			if (lightningActive) {
+				lightningTimer -= FlxG.elapsed;
+			} else {
+				lightningTimer = 1;
+			}
 
-		if (lightningTimer <= 0) {
-			applyLightning();
-			lightningTimer = FlxG.random.float(7, 15);
-		}
+			if (lightningTimer <= 0) {
+				applyLightning();
+				lightningTimer = FlxG.random.float(7, 15);
+			}
 		}
 
 		super.update(elapsed);
@@ -2055,95 +2124,44 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 
 		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null)
 		{
-		if (curSong.toLowerCase() == 'darnell')
-		{
-		switch (curStep)
-		{
-		case 32:
-		PlayState.SONG.notes[2].mustHitSection = false;
-		case 36:
-		PlayState.SONG.notes[2].mustHitSection = true;
-		case 256:
-		PlayState.SONG.notes[16].mustHitSection = true;
-		case 258:
-		PlayState.SONG.notes[16].mustHitSection = false;
-		case 320:
-		PlayState.SONG.notes[20].mustHitSection = false;
-		case 322:
-		PlayState.SONG.notes[20].mustHitSection = true;
-		case 384:
-		PlayState.SONG.notes[24].mustHitSection = true;
-		case 388:
-		PlayState.SONG.notes[24].mustHitSection = false;
-		case 448:
-		PlayState.SONG.notes[28].mustHitSection = false;
-		case 452:
-		PlayState.SONG.notes[28].mustHitSection = true;
-		case 768:
-		PlayState.SONG.notes[48].mustHitSection = true;
-		case 770:
-		PlayState.SONG.notes[48].mustHitSection = false;
-		case 832:
-		PlayState.SONG.notes[52].mustHitSection = false;
-		case 834:
-		PlayState.SONG.notes[52].mustHitSection = true;
-		case 896:
-		PlayState.SONG.notes[56].mustHitSection = true;
-		case 900:
-		PlayState.SONG.notes[56].mustHitSection = false;
-		case 960:
-		PlayState.SONG.notes[60].mustHitSection = false;
-		case 964:
-		PlayState.SONG.notes[60].mustHitSection = true;
-		case 1056:
-		PlayState.SONG.notes[66].mustHitSection = false;
-		case 1060:
-		PlayState.SONG.notes[66].mustHitSection = true;
-		}
-		}
-			
-		if(!isCameraOnForcedPos)
-		{
-			if (camFollow.x != dad.getMidpoint().x + 150 && !PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection)
+			if(SONG.events == null)
+			{
+			if (camFollow.x != dad.cameraFocusPoint.x && !PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection)
 			{
 				if(abot != null)
 				abot.lookLeft();
-				camFollow.setPosition(dad.getMidpoint().x + 150 + (lua != null ? getVar("followXOffset", "float") : 0), dad.getMidpoint().y - 100 + (lua != null ? getVar("followYOffset", "float") : 0));
+				camFollow.setPosition(dad.cameraFocusPoint.x, dad.cameraFocusPoint.y);
 
 				switch (curStage)
 				{
-					case 'phillyStreets':
-						var dadCenterX = dad.x + dad.width / 2;
-						var dadCenterY = dad.y + dad.height / 2;
-						camFollow.setPosition(dadCenterX + 500, dadCenterY + -100);
 					case 'phillyBlazin':
-						camFollow.setPosition(1403, 717);
+						camFollow.setPosition(gf.cameraFocusPoint.x + 50, gf.cameraFocusPoint.y - 90);
 				}
 			}
 
-			if (PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection && camFollow.x != boyfriend.getMidpoint().x - 100)
+			if (PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection && camFollow.x != boyfriend.cameraFocusPoint.x)
 			{
 				if(abot != null)
 				abot.lookRight();
-				camFollow.setPosition(boyfriend.getMidpoint().x - 100 + (lua != null ? getVar("followXOffset", "float") : 0), boyfriend.getMidpoint().y - 100 + (lua != null ? getVar("followYOffset", "float") : 0));
+				camFollow.setPosition(boyfriend.cameraFocusPoint.x, boyfriend.cameraFocusPoint.y);
 
 				switch (curStage)
 				{
-					case 'phillyStreets':
-						var boyfriendCenterX = boyfriend.x + boyfriend.width / 2;
-						var boyfriendCenterY = boyfriend.y + boyfriend.height / 2;
-						camFollow.setPosition(boyfriendCenterX + -350, boyfriendCenterY + -100);
 					case 'phillyBlazin':
-						camFollow.setPosition(1403, 717);
+						camFollow.setPosition(gf.cameraFocusPoint.x + 50, gf.cameraFocusPoint.y - 90);
 				}
 			}
-		}
+			}
 		}
 
-		if (camZooming)
+		// Apply camera zoom + multipliers.
+		if (subState == null && cameraZoomRate > 0.0) // && !inCutscene)
 		{
-			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
-			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
+			cameraBopMultiplier = FlxMath.lerp(1.0, cameraBopMultiplier, 0.95); // Lerp bop multiplier back to 1.0x
+			var zoomPlusBop = currentCameraZoom * cameraBopMultiplier; // Apply camera bop multiplier.
+			FlxG.camera.zoom = zoomPlusBop; // Actually apply the zoom to the camera.
+
+			camHUD.zoom = FlxMath.lerp(defaultHUDCameraZoom, camHUD.zoom, 0.95);
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -2223,9 +2241,6 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 	
 					if (!daNote.mustPress && daNote.wasGoodHit)
 					{
-						if (SONG.song != 'Tutorial')
-							camZooming = true;
-
 						if(curStage == 'phillyBlazin')
 						rainTimeScale += 0.7;
 
@@ -2259,17 +2274,17 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 		{
 		playKickCanAnim();
 
-				var newCan:SpraycanAtlasSprite = new SpraycanAtlasSprite(0, 0);
+		var newCan:SpraycanAtlasSprite = new SpraycanAtlasSprite(0, 0);
 
-				newCan.x = spraycanPile.x - 430;
-				newCan.y = spraycanPile.y - 840;
+		newCan.x = spraycanPile.x - 430;
+		newCan.y = spraycanPile.y - 840;
 
-				newCan.playCanStart();
+		newCan.playCanStart();
 
-				insert(members.indexOf(spraycanPile), newCan);
-				remove(spraycanPile);
-				insert(members.indexOf(newCan), spraycanPile);
-				spawnedCans.push(newCan);
+		insert(members.indexOf(spraycanPile), newCan);
+		remove(spraycanPile);
+		insert(members.indexOf(newCan), spraycanPile);
+		spawnedCans.push(newCan);
 		}
 		if(daNote.noteType == "weekend-1-kneecan")
 		playKneeCanAnim();
@@ -2352,6 +2367,7 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 		if (!inCutscene)
 			keyShit();
 
+		processSongEvents();
 
 		#if debug
 		if (FlxG.keys.justPressed.ONE)
@@ -2557,7 +2573,7 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 			}
 
 			if (daRating != 'shit' || daRating != 'bad')
-				{
+			{
 			songScore += Math.round(score);
 			songScoreDef += Math.round(ConvertScore.convertScore(noteDiff));
 	
@@ -2647,10 +2663,10 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 			currentTimingShown.velocity.x += comboSpr.velocity.x;
 			add(rating);
 	
-				rating.setGraphicSize(Std.int(rating.width * 0.7));
-				rating.antialiasing = true;
-				comboSpr.setGraphicSize(Std.int(comboSpr.width * 0.7));
-				comboSpr.antialiasing = true;
+			rating.setGraphicSize(Std.int(rating.width * 0.7));
+			rating.antialiasing = true;
+			comboSpr.setGraphicSize(Std.int(comboSpr.width * 0.7));
+			comboSpr.antialiasing = true;
 	
 			currentTimingShown.updateHitbox();
 			comboSpr.updateHitbox();
@@ -2682,8 +2698,8 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 				numScore.y = rating.y + 100;
 				numScore.cameras = [camHUD];
 
-					numScore.antialiasing = true;
-					numScore.setGraphicSize(Std.int(numScore.width * 0.5));
+				numScore.antialiasing = true;
+				numScore.setGraphicSize(Std.int(numScore.width * 0.5));
 
 				numScore.updateHitbox();
 	
@@ -3329,111 +3345,6 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 			resyncVocals();
 		}
 
-		if (curSong.toLowerCase() == '2hot')
-		{
-		switch (curStep)
-		{
-		case 108:
-		isCameraOnForcedPos = true;
-		var charCenterX = gf.x + gf.width / 2;
-		var charCenterY = gf.y + gf.height / 2;
-		camFollow.setPosition(charCenterX + 100,charCenterY + 105);
-
-		var durSeconds = Conductor.stepCrochet * 4 / 1000;
-		var targetZoom = 0.65 * FlxCamera.defaultZoom;
-		FlxTween.tween(this, {defaultCamZoom: targetZoom}, durSeconds, {ease: FlxEase.elasticInOut});
-
-		case 128:
-		isCameraOnForcedPos = false;
-
-		var durSeconds = Conductor.stepCrochet * 12 / 1000;
-		var targetZoom = 0.95 * 0.77;
-		FlxTween.tween(this, {defaultCamZoom: targetZoom}, durSeconds, {ease: FlxEase.quadInOut});
-
-		case 492:
-		isCameraOnForcedPos = true;
-		var charCenterX = gf.x + gf.width / 2;
-		var charCenterY = gf.y + gf.height / 2;
-		camFollow.setPosition(charCenterX + 100,charCenterY + 105);
-
-		var durSeconds = Conductor.stepCrochet * 4 / 1000;
-		var targetZoom = 0.65 * FlxCamera.defaultZoom;
-		FlxTween.tween(this, {defaultCamZoom: targetZoom}, durSeconds, {ease: FlxEase.elasticInOut});
-
-		case 512:
-		isCameraOnForcedPos = false;
-
-		var durSeconds = Conductor.stepCrochet * 12 / 1000;
-		var targetZoom = 0.95 * 0.77;
-		FlxTween.tween(this, {defaultCamZoom: targetZoom}, durSeconds, {ease: FlxEase.quadInOut});
-
-		case 620:
-		isCameraOnForcedPos = true;
-		var charCenterX = gf.x + gf.width / 2;
-		var charCenterY = gf.y + gf.height / 2;
-		camFollow.setPosition(charCenterX + 100,charCenterY + 105);
-
-		var durSeconds = Conductor.stepCrochet * 4 / 1000;
-		var targetZoom = 0.65 * FlxCamera.defaultZoom;
-		FlxTween.tween(this, {defaultCamZoom: targetZoom}, durSeconds, {ease: FlxEase.elasticInOut});
-
-		case 640:
-		isCameraOnForcedPos = false;
-
-		var durSeconds = Conductor.stepCrochet * 12 / 1000;
-		var targetZoom = 0.95 * 0.77;
-		FlxTween.tween(this, {defaultCamZoom: targetZoom}, durSeconds, {ease: FlxEase.quadInOut});
-
-		case 972:
-		isCameraOnForcedPos = true;
-		var charCenterX = gf.x + gf.width / 2;
-		var charCenterY = gf.y + gf.height / 2;
-		camFollow.setPosition(charCenterX + 100,charCenterY + 105);
-
-		var durSeconds = Conductor.stepCrochet * 4 / 1000;
-		var targetZoom = 0.65 * FlxCamera.defaultZoom;
-		FlxTween.tween(this, {defaultCamZoom: targetZoom}, durSeconds, {ease: FlxEase.elasticInOut});
-
-		case 992:
-		isCameraOnForcedPos = false;
-
-		var durSeconds = Conductor.stepCrochet * 12 / 1000;
-		var targetZoom = 0.95 * 0.77;
-		FlxTween.tween(this, {defaultCamZoom: targetZoom}, durSeconds, {ease: FlxEase.quadInOut});
-
-		case 1036:
-		isCameraOnForcedPos = true;
-		var charCenterX = gf.x + gf.width / 2;
-		var charCenterY = gf.y + gf.height / 2;
-		camFollow.setPosition(charCenterX + 100,charCenterY + 105);
-
-		var durSeconds = Conductor.stepCrochet * 4 / 1000;
-		var targetZoom = 0.65 * FlxCamera.defaultZoom;
-		FlxTween.tween(this, {defaultCamZoom: targetZoom}, durSeconds, {ease: FlxEase.elasticInOut});
-
-		case 1056:
-		isCameraOnForcedPos = false;
-
-		var durSeconds = Conductor.stepCrochet * 12 / 1000;
-		var targetZoom = 0.95 * 0.77;
-		FlxTween.tween(this, {defaultCamZoom: targetZoom}, durSeconds, {ease: FlxEase.quadInOut});
-
-		case 1420:
-		isCameraOnForcedPos = true;
-		var charCenterX = gf.x + gf.width / 2;
-		var charCenterY = gf.y + gf.height / 2;
-		camFollow.setPosition(charCenterX + 100,charCenterY + 105);
-
-		var durSeconds = Conductor.stepCrochet * 4 / 1000;
-		var targetZoom = 0.65 * FlxCamera.defaultZoom;
-		FlxTween.tween(this, {defaultCamZoom: targetZoom}, durSeconds, {ease: FlxEase.elasticInOut});
-
-		case 1440:
-		FlxG.camera.zoom = 0.77;
-		defaultCamZoom = 0.77;
-		}
-		}
-
 		if (executeModchart && lua != null)
 		{
 			setVar('curStep',curStep);
@@ -3475,10 +3386,13 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 				dad.dance();
 		}
 
-		if (camZooming && FlxG.camera.zoom < 1.35 && curBeat % 4 == 0)
+		// Only bop camera if zoom level is below 135%
+		if (FlxG.camera.zoom < (1.35 * FlxCamera.defaultZoom) && cameraZoomRate > 0 && curBeat % cameraZoomRate == 0)
 		{
-			FlxG.camera.zoom += 0.015;
-			camHUD.zoom += 0.03;
+			// Set zoom multiplier for camera bop.
+			cameraBopMultiplier = cameraBopIntensity;
+			// HUD camera zoom still uses old system. To change. (+3%)
+			camHUD.zoom += hudCameraZoomIntensity * defaultHUDCameraZoom;
 		}
 
 		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
@@ -3733,15 +3647,9 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
   var cutsceneConductor:CutsceneConductor;
 
   function introCutscene(){
-						var boyfriendCenterX = boyfriend.x + boyfriend.width / 2;
-						var boyfriendCenterY = boyfriend.y + boyfriend.height / 2;
-						var gfCenterX = gf.x + gf.width / 2;
-						var gfCenterY = gf.y + gf.height / 2;
-						var dadCenterX = dad.x + dad.width / 2;
-						var dadCenterY = dad.y + dad.height / 2;
-		var picoPos:Array<Float> = [boyfriendCenterX + -350, boyfriendCenterY + -100];
-		var nenePos:Array<Float> = [gfCenterX, gfCenterY];
-		var darnellPos:Array<Float> = [dadCenterX + 500, dadCenterY + -100];
+		var picoPos:Array<Float> = [boyfriend.cameraFocusPoint.x, boyfriend.cameraFocusPoint.y];
+		var nenePos:Array<Float> = [gf.cameraFocusPoint.x, gf.cameraFocusPoint.y];
+		var darnellPos:Array<Float> = [dad.cameraFocusPoint.x, dad.cameraFocusPoint.y];
 
 		var cutsceneDelay:Float = 2;
 
@@ -3775,10 +3683,9 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 
 		new FlxTimer().start(0.1, function(tmr)
 		{
-			camFollow.setPosition(picoPos[0] + 250, picoPos[1]);
-			FlxG.camera.focusOn(camFollow.getPosition());
+			tweenCameraToPosition(picoPos[0] + 250, picoPos[1], 0);
 
-			FlxG.camera.zoom  = 1.3;
+			tweenCameraZoom(1.3, 0, true, FlxEase.quadInOut);
 		});
 
 		new FlxTimer().start(0.7, function(tmr){
@@ -3787,8 +3694,8 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 		});
 
 		new FlxTimer().start(cutsceneDelay, function(tmr){
-			FlxTween.tween(camFollow, {x: darnellPos[0]+100, y: darnellPos[1]}, 2.5, {ease: FlxEase.quadInOut});
-			FlxTween.tween(FlxG.camera, {zoom: 0.66}, 2.5, {ease: FlxEase.quadInOut});
+			tweenCameraToPosition(darnellPos[0]+100, darnellPos[1], 2.5, FlxEase.quadInOut);
+			tweenCameraZoom(0.66, 2.5, true, FlxEase.quadInOut);
 		});
 
 		new FlxTimer().start(cutsceneDelay + 3, function(tmr)
@@ -3800,7 +3707,7 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 		new FlxTimer().start(cutsceneDelay + 4, function(tmr)
 		{
 			boyfriend.playAnim('cock', true);
-			FlxTween.tween(camFollow, {x: darnellPos[0]+180, y: darnellPos[1]}, 0.4, {ease: FlxEase.backOut});
+			tweenCameraToPosition(darnellPos[0]+180, darnellPos[1], 0.4, FlxEase.backOut);
 			FlxG.sound.play(Paths.sound('Gun_Prep', 'weekend1'), 1.0);
 		});
 
@@ -3826,7 +3733,7 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 
 			FlxG.sound.play(Paths.soundRandom('shot', 1, 4, 'weekend1'));
 
-			FlxTween.tween(camFollow, {x: darnellPos[0]+100, y: darnellPos[1]}, 1, {ease: FlxEase.quadInOut});
+			tweenCameraToPosition(darnellPos[0]+100, darnellPos[1], 1, FlxEase.quadInOut);
 
 			newCan.playCanShot();
 			newCan.visible = true;
@@ -3851,8 +3758,8 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 
 		new FlxTimer().start(cutsceneDelay + 8, function(tmr)
 		{
-			FlxTween.tween(FlxG.camera, {zoom: 0.77}, 2, {ease: FlxEase.sineInOut});
-			FlxTween.tween(camFollow, {x: darnellPos[0]+180, y: darnellPos[1]}, 2, {ease: FlxEase.sineInOut});
+			tweenCameraZoom(0.77, 2, true, FlxEase.sineInOut);
+			tweenCameraToPosition(darnellPos[0]+180, darnellPos[1], 2, FlxEase.sineInOut);
 			startCountdown();
 			camHUD.visible = true;
 			cutsceneMusic.stop();
@@ -4079,14 +3986,14 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 
 	function onAnimationFinished2(name:String) {
 		if (name == 'shootMISS' && health > 0.0) {
-      picoFlicker = FlxFlicker.flicker(boyfriend, 1, 1 / 30, true, true, function(_) {
+		picoFlicker = FlxFlicker.flicker(boyfriend, 1, 1 / 30, true, true, function(_) {
 		new FlxTimer().start(0.000001, function(tmr:FlxTimer)
 		{
         picoFlicker = FlxFlicker.flicker(boyfriend, 0.5, 1 / 60, true, true, function(_) {
 					picoFlicker = null;
 				});
 		});
-      });
+		});
 		}
 	}
 
@@ -4922,13 +4829,10 @@ function picoBlazinNoteMiss(note:Note)
 	}
 
 	function endCutscene(){
-		isCameraOnForcedPos = true;
-		camZooming = false;
 		new FlxTimer().start(1, function(tmr)
 		{
-			FlxTween.tween(camFollow, {x: 1539, y: 833.5}, 2, {ease: FlxEase.quadInOut});
-			var targetZoom = 0.69 * FlxCamera.defaultZoom;
-			FlxTween.tween(FlxG.camera, {zoom: targetZoom}, 2, {ease: FlxEase.quadInOut});
+			tweenCameraToPosition(1539, 833.5, 2, FlxEase.quadInOut);
+			tweenCameraZoom(0.69, 2, true, FlxEase.quadInOut);
 		});
 
 		new FlxTimer().start(2, function(tmr)
@@ -4957,5 +4861,209 @@ function picoBlazinNoteMiss(note:Note)
   {
     if (a == null || b == null) return 0;
     return FlxSort.byValues(order, a.zIndex, b.zIndex);
+  }
+
+  function processSongEvents():Void
+  {
+		if (songEvents != null && songEvents.length > 0) {
+		while(songEvents.length > 0) {
+			var leStrumTime:Float = songEvents[0].time;
+			if(Conductor.songPosition < leStrumTime) {
+				break;
+			}
+			if(songEvents[0].eventKind == 'FocusCamera')
+			FocusCameraSongEvent(songEvents[0]);
+			if(songEvents[0].eventKind == 'ZoomCamera')
+			ZoomCameraSongEvent(songEvents[0]);
+			songEvents[0].activated = true;
+			songEvents.shift();
+		}
+		}
+  }
+
+  function FocusCameraSongEvent(data:SongEventData)
+  {
+    var posX:Null<Float> = data.getFloat('x');
+    if (posX == null) posX = 0.0;
+    var posY:Null<Float> = data.getFloat('y');
+    if (posY == null) posY = 0.0;
+
+    var char:Null<Int> = data.getInt('char');
+
+    if (char == null) char = cast data.value;
+
+    var duration:Null<Float> = data.getFloat('duration');
+    if (duration == null) duration = 4.0;
+    var ease:Null<String> = data.getString('ease');
+    if (ease == null) ease = 'CLASSIC';
+
+    // Get target position based on char.
+    var targetX:Float = posX;
+    var targetY:Float = posY;
+
+    switch (char)
+    {
+      case -1: // Position ("focus" on origin)
+        trace('Focusing camera on static position.');
+
+      case 0: // Boyfriend (focus on player)
+        trace('Focusing camera on player.');
+        var bfPoint = boyfriend.cameraFocusPoint;
+        targetX += bfPoint.x;
+        targetY += bfPoint.y;
+
+	if(abot != null)
+	abot.lookRight();
+
+      case 1: // Dad (focus on opponent)
+        trace('Focusing camera on opponent.');
+        var dadPoint = dad.cameraFocusPoint;
+        targetX += dadPoint.x;
+        targetY += dadPoint.y;
+
+	if(abot != null)
+	abot.lookLeft();
+
+      case 2: // Girlfriend (focus on girlfriend)
+        trace('Focusing camera on girlfriend.');
+        var gfPoint = gf.cameraFocusPoint;
+        targetX += gfPoint.x;
+        targetY += gfPoint.y;
+
+      default:
+        trace('Unknown camera focus: ' + data);
+    }
+
+    // Apply tween based on ease.
+    switch (ease)
+    {
+      case 'CLASSIC': // Old-school. No ease. Just set follow point.
+        cancelCameraFollowTween();
+        camFollow.setPosition(targetX, targetY);
+      case 'INSTANT': // Instant ease. Duration is automatically 0.
+        tweenCameraToPosition(targetX, targetY, 0);
+      default:
+        var durSeconds = Conductor.stepCrochet * duration / 1000;
+        var easeFunction:Null<Float->Float> = Reflect.field(FlxEase, ease);
+        if (easeFunction == null)
+        {
+          trace('Invalid ease function: $ease');
+          return;
+        }
+        tweenCameraToPosition(targetX, targetY, durSeconds, easeFunction);
+    }
+  }
+
+  function tweenCameraToPosition(?x:Float, ?y:Float, ?duration:Float, ?ease:Null<Float->Float>):Void
+  {
+    camFollow.setPosition(x, y);
+    tweenCameraToFollowPoint(duration, ease);
+  }
+
+  public function tweenCameraToFollowPoint(?duration:Float, ?ease:Null<Float->Float>):Void
+  {
+    // Cancel the current tween if it's active.
+    cancelCameraFollowTween();
+
+    if (duration == 0)
+    {
+      // Instant movement. Just reset the camera to force it to the follow point.
+      FlxG.camera.follow(camFollow, LOCKON, cameraSpeed);
+      FlxG.camera.focusOn(camFollow.getPosition());
+    }
+    else
+    {
+      // Disable camera following for the duration of the tween.
+      FlxG.camera.target = null;
+
+      // Follow tween! Caching it so we can cancel/pause it later if needed.
+      var followPos = new FlxPoint(
+      camFollow.x - FlxG.camera.width * 0.5,
+      camFollow.y - FlxG.camera.height * 0.5
+      );
+      cameraFollowTween = FlxTween.tween(FlxG.camera.scroll, {x: followPos.x, y: followPos.y}, duration,
+        {
+          ease: ease,
+          onComplete: function(_) {
+            FlxG.camera.follow(camFollow, LOCKON, cameraSpeed);
+            FlxG.camera.focusOn(camFollow.getPosition());
+          }
+        });
+    }
+  }
+
+  function cancelCameraFollowTween()
+  {
+    if (cameraFollowTween != null)
+    {
+      cameraFollowTween.cancel();
+    }
+  }
+
+  var DEFAULT_ZOOM:Float = 1.0;
+  var DEFAULT_DURATION:Float = 4.0;
+  var DEFAULT_MODE:String = 'direct';
+  var DEFAULT_EASE:String = 'linear';
+
+  function ZoomCameraSongEvent(data:SongEventData)
+  {
+    var zoom:Float = data.getFloat('zoom');
+    if(Math.isNaN(zoom)) zoom = DEFAULT_ZOOM;
+
+    var duration:Float = data.getFloat('duration');
+    if(Math.isNaN(duration)) duration = DEFAULT_DURATION;
+
+    var mode:String = data.getString('mode');
+    if(mode == null) mode = DEFAULT_MODE;
+    var isDirectMode:Bool = mode == 'direct';
+
+    var ease:String = data.getString('ease');
+    if(ease == null) ease = DEFAULT_EASE;
+
+    // If it's a string, check the value.
+    switch (ease)
+    {
+      case 'INSTANT':
+        tweenCameraZoom(zoom, 0, isDirectMode);
+      default:
+        var durSeconds = Conductor.stepCrochet * duration / 1000;
+        var easeFunction:Null<Float->Float> = Reflect.field(FlxEase, ease);
+        if (easeFunction == null)
+        {
+          trace('Invalid ease function: $ease');
+          return;
+        }
+
+        tweenCameraZoom(zoom, durSeconds, isDirectMode, easeFunction);
+    }
+  }
+
+  public function tweenCameraZoom(?zoom:Float, ?duration:Float, ?direct:Bool, ?ease:Null<Float->Float>):Void
+  {
+    // Cancel the current tween if it's active.
+    cancelCameraZoomTween();
+
+    // Direct mode: Set zoom directly.
+    // Stage mode: Set zoom as a multiplier of the current stage's default zoom.
+    var targetZoom = zoom * (direct ? FlxCamera.defaultZoom : stageZoom);
+
+    if (duration == 0)
+    {
+      // Instant zoom. No tween needed.
+      currentCameraZoom = targetZoom;
+    }
+    else
+    {
+      // Zoom tween! Caching it so we can cancel/pause it later if needed.
+      cameraZoomTween = FlxTween.tween(this, {currentCameraZoom: targetZoom}, duration, {ease: ease});
+    }
+  }
+
+  public function cancelCameraZoomTween()
+  {
+    if (cameraZoomTween != null)
+    {
+      cameraZoomTween.cancel();
+    }
   }
 }
