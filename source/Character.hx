@@ -19,6 +19,10 @@ class Character extends FlxSprite
 
 	public var holdTimer:Float = 0;
 
+	public var cameraFocusPoint:FlxPoint = new FlxPoint(0, 0);
+
+	public var cameraOffsets:Array<Float> = [0,0];
+
 	public var canPlayOtherAnims:Bool = true;
 
 	public var VULTURE_THRESHOLD = 0.25 * 2;
@@ -293,7 +297,7 @@ animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 
 	override function update(elapsed:Float)
 	{
-		if (!curCharacter.startsWith('bf'))
+		if (!curCharacter.startsWith('bf') && curCharacter != 'pico-playable' && curCharacter != 'pico-blazin')
 		{
 			if (animation.curAnim.name.startsWith('sing'))
 			{
@@ -423,5 +427,13 @@ animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
     output.x -= (animOffsets2[0] - globalOffsets[0]) * this.scale.x;
     output.y -= (animOffsets2[1] - globalOffsets[1]) * this.scale.y;
     return output;
+  }
+
+  public function resetCameraFocusPoint():Void
+  {
+    // Calculate the camera focus point
+    var charCenterX = this.x + this.width / 2;
+    var charCenterY = this.y + this.height / 2;
+    this.cameraFocusPoint = new FlxPoint(charCenterX + cameraOffsets[0], charCenterY + cameraOffsets[1]);
   }
 }
