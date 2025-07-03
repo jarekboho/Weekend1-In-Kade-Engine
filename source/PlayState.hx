@@ -2635,9 +2635,7 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 
 				for(i in hits)
 					total += i;
-				
 
-				
 				offsetTest = truncateFloat(total / hits.length,2);
 			}
 
