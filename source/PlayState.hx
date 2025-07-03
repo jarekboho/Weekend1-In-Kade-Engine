@@ -4871,11 +4871,11 @@ function picoBlazinNoteMiss(note:Note)
 			if(Conductor.songPosition < leStrumTime) {
 				break;
 			}
+			songEvents[0].activated = true;
 			if(songEvents[0].eventKind == 'FocusCamera')
 			FocusCameraSongEvent(songEvents[0]);
 			if(songEvents[0].eventKind == 'ZoomCamera')
 			ZoomCameraSongEvent(songEvents[0]);
-			songEvents[0].activated = true;
 			songEvents.shift();
 		}
 		}
