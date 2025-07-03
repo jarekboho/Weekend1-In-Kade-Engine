@@ -41,12 +41,23 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		Conductor.songPosition = 0;
 
+		var playState = cast(FlxG.state, PlayState);
+
 		if(daStage != 'phillyBlazin')
 		{
 		bf = new Boyfriend(x, y, daBf);
 		add(bf);
 
 		bf.updateHitbox();
+
+		@:privateAccess
+		{
+		bf.origin.x = playState.boyfriend.origin.x;
+		bf.origin.y = playState.boyfriend.origin.y;
+
+		bf.offset.x = playState.boyfriend.offset.x;
+		bf.offset.y = playState.boyfriend.offset.y;
+		}
 		}
 
 if(daStage == 'phillyBlazin')
@@ -101,8 +112,11 @@ new FlxTimer().start(1.25, function(tmr){afterPicoDeathGutPunchIntro();});
 		}
 		else
 		{
-		camFollow.x = getMidPointOld(bf).x + 10;
-		camFollow.y = getMidPointOld(bf).y + -40;
+		@:privateAccess
+		{
+		camFollow.x = getMidPointOld(playState.boyfriend).x + 10;
+		camFollow.y = getMidPointOld(playState.boyfriend).y + -40;
+		}
 		}
 		add(camFollow);
 
