@@ -206,7 +206,6 @@ class PlayState extends MusicBeatState
 	public static var campaignScore:Int = 0;
 
 	public static var theFunne:Bool = true;
-	var funneEffect:FlxSprite;
 	var inCutscene:Bool = false;
 	public static var repPresses:Int = 0;
 	public static var repReleases:Int = 0;
