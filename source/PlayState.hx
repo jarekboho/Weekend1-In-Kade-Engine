@@ -4932,6 +4932,7 @@ function picoBlazinNoteMiss(note:Note)
     switch (ease)
     {
       case 'CLASSIC': // Old-school. No ease. Just set follow point.
+        resetCamera(false, false, false);
         cancelCameraFollowTween();
         camFollow.setPosition(targetX, targetY);
       case 'INSTANT': // Instant ease. Duration is automatically 0.
@@ -4954,7 +4955,7 @@ function picoBlazinNoteMiss(note:Note)
     tweenCameraToFollowPoint(duration, ease);
   }
 
-  public function tweenCameraToFollowPoint(?duration:Float, ?ease:Null<Float->Float>):Void
+  function tweenCameraToFollowPoint(?duration:Float, ?ease:Null<Float->Float>):Void
   {
     // Cancel the current tween if it's active.
     cancelCameraFollowTween();
@@ -4962,8 +4963,7 @@ function picoBlazinNoteMiss(note:Note)
     if (duration == 0)
     {
       // Instant movement. Just reset the camera to force it to the follow point.
-      FlxG.camera.follow(camFollow, LOCKON, cameraSpeed);
-      FlxG.camera.focusOn(camFollow.getPosition());
+      resetCamera(false, false);
     }
     else
     {
@@ -4979,8 +4979,7 @@ function picoBlazinNoteMiss(note:Note)
         {
           ease: ease,
           onComplete: function(_) {
-            FlxG.camera.follow(camFollow, LOCKON, cameraSpeed);
-            FlxG.camera.focusOn(camFollow.getPosition());
+            resetCamera(false, false); // Re-enable camera following when the tween is complete.
           }
         });
     }
@@ -5032,7 +5031,7 @@ function picoBlazinNoteMiss(note:Note)
     }
   }
 
-  public function tweenCameraZoom(?zoom:Float, ?duration:Float, ?direct:Bool, ?ease:Null<Float->Float>):Void
+  function tweenCameraZoom(?zoom:Float, ?duration:Float, ?direct:Bool, ?ease:Null<Float->Float>):Void
   {
     // Cancel the current tween if it's active.
     cancelCameraZoomTween();
@@ -5053,11 +5052,45 @@ function picoBlazinNoteMiss(note:Note)
     }
   }
 
-  public function cancelCameraZoomTween()
+  function cancelCameraZoomTween()
   {
     if (cameraZoomTween != null)
     {
       cameraZoomTween.cancel();
     }
+  }
+
+  function resetCamera(?resetZoom:Bool = true, ?cancelTweens:Bool = true, ?snap:Bool = true):Void
+  {
+    // Cancel camera tweens if any are active.
+    if (cancelTweens)
+    {
+      cancelAllCameraTweens();
+    }
+
+    FlxG.camera.follow(camFollow, LOCKON, cameraSpeed);
+
+    if (resetZoom)
+    {
+      resetCameraZoom();
+    }
+
+    // Snap the camera to the follow point immediately.
+    if (snap) FlxG.camera.focusOn(camFollow.getPosition());
+  }
+
+  function cancelAllCameraTweens()
+  {
+    cancelCameraFollowTween();
+    cancelCameraZoomTween();
+  }
+
+  function resetCameraZoom():Void
+  {
+    currentCameraZoom = stageZoom;
+    FlxG.camera.zoom = currentCameraZoom;
+
+    // Reset bop multiplier.
+    cameraBopMultiplier = 1.0;
   }
 }
