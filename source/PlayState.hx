@@ -3376,8 +3376,7 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 				FlxG.log.add('CHANGED BPM!');
 			}
 
-			if (SONG.notes[Math.floor(curStep / 16)].mustHitSection)
-				dad.dance();
+			dad.dance();
 		}
 
 		// Only bop camera if zoom level is below 135%
