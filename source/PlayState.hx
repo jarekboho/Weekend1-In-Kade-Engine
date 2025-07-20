@@ -2373,6 +2373,9 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 
 	function endSong():Void
 	{
+		if(abot != null)
+		abot.dumpSound();
+
 		lightningActive = false;
 
 		if (SONG.song.toLowerCase() == '2hot' && !hasPlayedCutscene && isStoryMode)
