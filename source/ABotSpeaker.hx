@@ -116,6 +116,11 @@ class ABotSpeaker extends FlxTypedSpriteGroup<FlxSprite>
 		#end
 	}
 
+	public function dumpSound():Void
+	{
+		analyzer = null;
+	}
+
 	var levelMax:Int = 0;
 	override function update(elapsed:Float):Void
 	{
@@ -126,7 +131,7 @@ class ABotSpeaker extends FlxTypedSpriteGroup<FlxSprite>
 		levelMax = 0;
 		for (i in 0...Std.int(Math.min(vizSprites.length, levels.length)))
 		{
-			var animFrame:Int = Math.round(levels[i].value * 6);
+			var animFrame:Int = (FlxG.sound.volume == 0 || FlxG.sound.muted) ? 0 : Math.round(levels[i].value * 6);
 
 			vizSprites[i].visible = animFrame > 0;
 
