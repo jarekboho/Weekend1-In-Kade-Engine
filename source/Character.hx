@@ -304,7 +304,7 @@ animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 				holdTimer += elapsed;
 			}
 
-			var dadVar:Float = 4;
+			var dadVar:Float = 8.0;
 
 			if (holdTimer >= Conductor.stepCrochet * dadVar * 0.001)
 			{
