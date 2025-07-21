@@ -515,34 +515,35 @@ class PlayState extends MusicBeatState
 			phillySkyline.antialiasing = true;
 			add(phillySkyline);
 
-			var phillyForegroundCity = new FlxSprite(625, 94).loadGraphic(Paths.image("phillyStreets/phillyForegroundCity", 'weekend1'));
-			phillyForegroundCity.scrollFactor.set(0.3, 0.3);
-			phillyForegroundCity.antialiasing = true;
-			add(phillyForegroundCity);
+			var phillyForegroundCity2 = new FlxSprite(1865, 220).loadGraphic(Paths.image("phillyStreets/phillyForegroundCity", 'weekend1'));
+			phillyForegroundCity2.scrollFactor.set(0.3, 0.3);
+			phillyForegroundCity2.antialiasing = true;
+			phillyForegroundCity2.angle = 5;
+			add(phillyForegroundCity2);
 
 			var phillyConstruction = new FlxSprite(1800, 364).loadGraphic(Paths.image("phillyStreets/phillyConstruction", 'weekend1'));
 			phillyConstruction.scrollFactor.set(0.7, 1);
 			phillyConstruction.antialiasing = true;
 			add(phillyConstruction);
 
-			var phillyHighwayLights = new FlxSprite(284, 305).loadGraphic(Paths.image("phillyStreets/phillyHighwayLights", 'weekend1'));
-			phillyHighwayLights.scrollFactor.set(1, 1);
+			var phillyHighwayLights = new FlxSprite(122, 201).loadGraphic(Paths.image("phillyStreets/phillyHighwayLights", 'weekend1'));
+			phillyHighwayLights.scrollFactor.set(0.8, 0.8);
 			phillyHighwayLights.antialiasing = true;
 			add(phillyHighwayLights);
 
-			var phillyHighwayLights_lightmap = new FlxSprite(284, 305).loadGraphic(Paths.image("phillyStreets/phillyHighwayLights_lightmap", 'weekend1'));
-			phillyHighwayLights_lightmap.scrollFactor.set(1, 1);
+			var phillyHighwayLights_lightmap = new FlxSprite(122, 201).loadGraphic(Paths.image("phillyStreets/phillyHighwayLights_lightmap", 'weekend1'));
+			phillyHighwayLights_lightmap.scrollFactor.set(0.8, 0.8);
 			phillyHighwayLights_lightmap.antialiasing = true;
 			phillyHighwayLights_lightmap.blend = ADD;
 			phillyHighwayLights_lightmap.alpha = 0.6;
 			add(phillyHighwayLights_lightmap);
 
-			var phillyHighway = new FlxSprite(139, 209).loadGraphic(Paths.image("phillyStreets/phillyHighway", 'weekend1'));
-			phillyHighway.scrollFactor.set(1, 1);
+			var phillyHighway = new FlxSprite(-23, 105).loadGraphic(Paths.image("phillyStreets/phillyHighway", 'weekend1'));
+			phillyHighway.scrollFactor.set(0.8, 0.8);
 			phillyHighway.antialiasing = true;
 			add(phillyHighway);
 
-			var phillySmog = new FlxSprite(-6, 245).loadGraphic(Paths.image("phillyStreets/phillySmog", 'weekend1'));
+			var phillySmog = new FlxSprite(-6, 305).loadGraphic(Paths.image("phillyStreets/phillySmog", 'weekend1'));
 			phillySmog.scrollFactor.set(0.8, 1);
 			phillySmog.antialiasing = true;
 			add(phillySmog);
@@ -2969,7 +2970,7 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 				});
 			}
 	
-			if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !up && !down && !right && !left)
+			if (boyfriend.holdTimer > Conductor.stepCrochet * 8.0 * 0.001 && !up && !down && !right && !left)
 			{
 				if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
 				{
@@ -3380,7 +3381,10 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 			}
 		}
 
-		dad.dance();
+		if (!dad.animation.curAnim.name.startsWith("sing"))
+		{
+			dad.dance();
+		}
 
 		// Only bop camera if zoom level is below 135%
 		if (FlxG.camera.zoom < (1.35 * FlxCamera.defaultZoom) && cameraZoomRate > 0 && curBeat % cameraZoomRate == 0)
