@@ -3059,10 +3059,6 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 		if (!boyfriend.stunned)
 		{
 			health -= 0.04;
-			if (combo > 5 && gf.animOffsets.exists('sad'))
-			{
-				gf.playAnim('sad');
-			}
 			if (combo > 70 && gf.animOffsets.exists('drop70'))
 			{
 				gf.canPlayOtherAnims = true;
