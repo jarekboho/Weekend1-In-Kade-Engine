@@ -145,7 +145,7 @@ class Character extends FlxSprite
 				animation.addByPrefix('singUP', 'Pose Up0', 24, false);
 				animation.addByPrefix('singRIGHT', 'Pose Right0', 24, false);
 				animation.addByPrefix('laugh', 'Laugh0', 24, false);
-			animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5], "", 24, false);
+			animation.addByIndices('laughCutscene', 'Laugh0', [1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6], "", 24, false);
 				animation.addByPrefix('lightCan', 'Light Can0', 24, false);
 				animation.addByPrefix('kickCan', 'Kick Up0', 24, false);
 				animation.addByPrefix('kneeCan', 'Knee Forward0', 24, false);
