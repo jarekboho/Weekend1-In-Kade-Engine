@@ -377,8 +377,6 @@ class PlayState extends MusicBeatState
 
 	public static var luaSprites:Map<String,FlxSprite> = [];
 
-
-
 	function makeLuaSprite(spritePath:String,toBeCalled:String, drawBehind:Bool)
 	{
 		#if sys
