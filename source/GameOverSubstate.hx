@@ -185,8 +185,6 @@ new FlxTimer().start(1.25, function(tmr){afterPicoDeathGutPunchIntro();});
 				deathSpriteRetry.y = bf.y - 70;
 			}
 
-			var playState = cast(FlxG.state, PlayState);
-
 			if(!isEnding)
 			{
 			FlxG.sound.playMusic(Paths.music('gameOver' + stageSuffix));
