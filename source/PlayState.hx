@@ -580,6 +580,7 @@ class PlayState extends MusicBeatState
 			phillyTraffic.animation.addByPrefix("togreen", "redtogreen", 24, false);
 			phillyTraffic.animation.addByPrefix("tored", "greentored", 24, false);
 			add(phillyTraffic);
+			phillyTraffic.animation.play('togreen');
 
 			var phillyHighwayLights_lightmap = new FlxSprite(1840, 608).loadGraphic(Paths.image("phillyStreets/phillyTraffic_lightmap", 'weekend1'));
 			phillyHighwayLights_lightmap.scrollFactor.set(0.9, 1);
