@@ -546,7 +546,7 @@ class PlayState extends MusicBeatState
 			phillySmog.antialiasing = true;
 			add(phillySmog);
 
-			phillyCars = new FlxSprite(1748, 818);
+			phillyCars = new FlxSprite(1200, 818);
 			phillyCars.frames = Paths.getSparrowAtlas("phillyStreets/phillyCars", 'weekend1');
 			phillyCars.scrollFactor.set(0.9, 1);
 			phillyCars.antialiasing = true;
@@ -556,7 +556,7 @@ class PlayState extends MusicBeatState
 			phillyCars.animation.addByPrefix("car4", "car4", 0, false);
 			add(phillyCars);
 
-			phillyCars2 = new FlxSprite(1748, 818);
+			phillyCars2 = new FlxSprite(1200, 818);
 			phillyCars2.frames = Paths.getSparrowAtlas("phillyStreets/phillyCars", 'weekend1');
 			phillyCars2.scrollFactor.set(0.9, 1);
 			phillyCars2.antialiasing = true;
