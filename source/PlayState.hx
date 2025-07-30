@@ -2244,6 +2244,8 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 							if (SONG.notes[Math.floor(curStep / 16)].altAnim)
 								altAnim = '-alt';
 						}
+
+						dad.canPlayOtherAnims = true;
 	
 						switch (Math.abs(daNote.noteData))
 						{
@@ -3261,6 +3263,8 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 
 						if(curStage == 'phillyBlazin')
 						rainTimeScale += 0.7;
+
+						boyfriend.canPlayOtherAnims = true;
 
 					switch (note.noteData)
 					{
