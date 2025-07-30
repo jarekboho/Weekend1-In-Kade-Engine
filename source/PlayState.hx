@@ -502,6 +502,12 @@ class PlayState extends MusicBeatState
 			curStage = 'phillyStreets';
 			currentCameraZoom = 0.77;
 
+			var solid = new FlxSprite(-500, -1000).makeGraphic(1, 1, 0xFF8E9191);
+			solid.scrollFactor.set(0, 0);
+			solid.scale.set(4000, 3000);
+			solid.updateHitbox();
+			add(solid);
+
 			scrollingSky = new FlxTiledSprite(Paths.image('phillyStreets/phillySkybox', 'weekend1'), 2922, 718, true, false);
 			scrollingSky.setPosition(-650, -375);
 			scrollingSky.scrollFactor.set(0.1, 0.1);
