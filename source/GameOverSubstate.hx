@@ -237,11 +237,11 @@ new FlxTimer().start(1.25, function(tmr){afterPicoDeathGutPunchIntro();});
 		}
 	}
 
-  function getMidPointOld(spr:FlxSprite, ?point:FlxPoint):FlxPoint
-  {
-    if (point == null) point = FlxPoint.get();
-    return point.set(spr.x + spr.frameWidth * 0.5 * spr.scale.x, spr.y + spr.frameHeight * 0.5 * spr.scale.y);
-  }
+	function getMidPointOld(spr:FlxSprite, ?point:FlxPoint):FlxPoint
+	{
+		if (point == null) point = FlxPoint.get();
+		return point.set(spr.x + spr.frameWidth * 0.5 * spr.scale.x, spr.y + spr.frameHeight * 0.5 * spr.scale.y);
+	}
 
 	function createDeathSprites() {
 		deathSpriteRetry = new FlxSprite(0, 0);
