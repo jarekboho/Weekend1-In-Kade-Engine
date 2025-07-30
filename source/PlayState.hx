@@ -3648,11 +3648,11 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 		FlxG.camera.setFilters([new ShaderFilter(rainShader)]);
 	}
 
-  var cutsceneMusic:FlxSound;
+	var cutsceneMusic:FlxSound;
 
-  var cutsceneConductor:CutsceneConductor;
+	var cutsceneConductor:CutsceneConductor;
 
-  function introCutscene(){
+	function introCutscene(){
 		var picoPos:Array<Float> = [boyfriend.cameraFocusPoint.x, boyfriend.cameraFocusPoint.y];
 		var nenePos:Array<Float> = [gf.cameraFocusPoint.x, gf.cameraFocusPoint.y];
 		var darnellPos:Array<Float> = [dad.cameraFocusPoint.x, dad.cameraFocusPoint.y];
