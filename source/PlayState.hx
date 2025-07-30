@@ -3086,6 +3086,7 @@ var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 
 			}
 			else
 			{
+			boyfriend.canPlayOtherAnims = true;
 			switch (direction)
 			{
 				case 0:
