@@ -553,16 +553,6 @@ class PlayState extends MusicBeatState
 			phillySmog.antialiasing = true;
 			add(phillySmog);
 
-			phillyCars = new FlxSprite(1200, 818);
-			phillyCars.frames = Paths.getSparrowAtlas("phillyStreets/phillyCars", 'weekend1');
-			phillyCars.scrollFactor.set(0.9, 1);
-			phillyCars.antialiasing = true;
-			phillyCars.animation.addByPrefix("car1", "car1", 0, false);
-			phillyCars.animation.addByPrefix("car2", "car2", 0, false);
-			phillyCars.animation.addByPrefix("car3", "car3", 0, false);
-			phillyCars.animation.addByPrefix("car4", "car4", 0, false);
-			add(phillyCars);
-
 			phillyCars2 = new FlxSprite(1200, 818);
 			phillyCars2.frames = Paths.getSparrowAtlas("phillyStreets/phillyCars", 'weekend1');
 			phillyCars2.scrollFactor.set(0.9, 1);
@@ -573,6 +563,16 @@ class PlayState extends MusicBeatState
 			phillyCars2.animation.addByPrefix("car3", "car3", 0, false);
 			phillyCars2.animation.addByPrefix("car4", "car4", 0, false);
 			add(phillyCars2);
+
+			phillyCars = new FlxSprite(1200, 818);
+			phillyCars.frames = Paths.getSparrowAtlas("phillyStreets/phillyCars", 'weekend1');
+			phillyCars.scrollFactor.set(0.9, 1);
+			phillyCars.antialiasing = true;
+			phillyCars.animation.addByPrefix("car1", "car1", 0, false);
+			phillyCars.animation.addByPrefix("car2", "car2", 0, false);
+			phillyCars.animation.addByPrefix("car3", "car3", 0, false);
+			phillyCars.animation.addByPrefix("car4", "car4", 0, false);
+			add(phillyCars);
 
 			phillyTraffic = new FlxSprite(1840, 608);
 			phillyTraffic.frames = Paths.getSparrowAtlas("phillyStreets/phillyTraffic", 'weekend1');
