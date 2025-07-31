@@ -583,12 +583,12 @@ class PlayState extends MusicBeatState
 			add(phillyTraffic);
 			phillyTraffic.animation.play('togreen');
 
-			var phillyHighwayLights_lightmap = new FlxSprite(1840, 608).loadGraphic(Paths.image("phillyStreets/phillyTraffic_lightmap", 'weekend1'));
-			phillyHighwayLights_lightmap.scrollFactor.set(0.9, 1);
-			phillyHighwayLights_lightmap.antialiasing = true;
-			phillyHighwayLights_lightmap.blend = ADD;
-			phillyHighwayLights_lightmap.alpha = 0.6;
-			add(phillyHighwayLights_lightmap);
+			var phillyTraffic_lightmap = new FlxSprite(1840, 608).loadGraphic(Paths.image("phillyStreets/phillyTraffic_lightmap", 'weekend1'));
+			phillyTraffic_lightmap.scrollFactor.set(0.9, 1);
+			phillyTraffic_lightmap.antialiasing = true;
+			phillyTraffic_lightmap.blend = ADD;
+			phillyTraffic_lightmap.alpha = 0.6;
+			add(phillyTraffic_lightmap);
 
 			var phillyForeground = new FlxSprite(88, 317).loadGraphic(Paths.image("phillyStreets/phillyForeground", 'weekend1'));
 			phillyForeground.antialiasing = true;
