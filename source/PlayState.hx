@@ -523,6 +523,7 @@ class PlayState extends MusicBeatState
 			phillyForegroundCity2.scrollFactor.set(0.3, 0.3);
 			phillyForegroundCity2.antialiasing = true;
 			phillyForegroundCity2.angle = 5;
+			phillyForegroundCity2.flipX = true;
 			add(phillyForegroundCity2);
 
 			var phillyConstruction = new FlxSprite(1800, 364).loadGraphic(Paths.image("phillyStreets/phillyConstruction", 'weekend1'));
