@@ -8,6 +8,7 @@ import openfl.utils.Assets;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.graphics.frames.FlxFrame;
+import flixel.util.FlxColor;
 
 typedef Light =
 {
