@@ -86,7 +86,7 @@ class Character extends FlxSprite
 
 			case 'dad':
 				// DAD ANIMATION LOADING CODE
-				tex = Paths.getSparrowAtlas('DADDY_DEAREST','shared');
+				tex = Paths.getSparrowAtlas('daddyDearest','shared');
 				frames = tex;
 				animation.addByPrefix('idle', 'Dad idle dance', 24);
 				animation.addByPrefix('singUP', 'Dad Sing Note UP', 24);
@@ -170,7 +170,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 			case 'pico-playable' | 'pico-blazin':
-				var assetList = ['Pico_Playable', 'Pico_Shooting', 'Pico_Death', 'Pico_Intro'];
+				var assetList = ['Pico_Playable', 'Pico_Shooting', 'Pico_Death', 'Pico_Intro', 'Pico_Censored', 'pico-cheer', 'pico-yeah', 'Pico_Burps'];
 
 				var texture:FlxAtlasFrames = Paths.getSparrowAtlas('Pico_Basic', 'weekend1');
 
@@ -222,6 +222,16 @@ animation.addByIndices('firstDeath', 'Pico Death Stab', [1, 2, 3, 4, 5, 6, 7, 8,
 				animation.addByPrefix('intro1', 'Pico Gets Pissed0', 24, false);
 				animation.addByPrefix('cockCutscene', 'cutscene cock0', 24, false);
 				animation.addByPrefix('intro2', 'shoot and return0', 24, false);
+				animation.addByPrefix('singRIGHT-censor', 'pico swear right', 24, false);
+				animation.addByPrefix('singDOWN-censor', 'pico swear down', 24, false);
+				animation.addByPrefix('singUP-censor', 'pico swear up', 24, false);
+				animation.addByPrefix('singLEFT-censor', 'pico swear left', 24, false);
+				animation.addByPrefix('hey', 'Pico HEY!!0', 24, false);
+				animation.addByPrefix('cheer', 'Pico YEAH cheer0', 24, false);
+				animation.addByPrefix('burpShit', 'burpshit', 24, false);
+				animation.addByPrefix('burpSmile', 'burpsmile', 24, false);
+animation.addByIndices('burpSmileLong', 'burpsmile', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 25, 26, 27, 28, 29, 30, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31], "", 24, false);
+				animation.addByPrefix('shit', 'shit', 24, false);
 
 				addOffset('idle');
 				addOffset("singRIGHT", -50, 1);
@@ -241,13 +251,56 @@ animation.addByIndices('firstDeath', 'Pico Death Stab', [1, 2, 3, 4, 5, 6, 7, 8,
 				addOffset("intro1", 60, 0);
 				addOffset("cockCutscene", 0, 0);
 				addOffset("intro2", 260, 230);
+				addOffset("singRIGHT-censor", -50, 1);
+				addOffset("singDOWN-censor", 84, -77);
+				addOffset("singUP-censor", 21, 28);
+				addOffset("singLEFT-censor", 84, -11);
+				addOffset("hey", 0, 0);
+				addOffset("cheer", 0, 0);
+				addOffset("burpShit", 33, -3);
+				addOffset("burpSmile", 33, -3);
+				addOffset("burpSmileLong", 33, -3);
+				addOffset("shit", 0, -3);
 
 				playAnim('idle');
 
 				flipX = true;
 
 			case 'nene':
-				frames = Paths.getSparrowAtlas('Nene','weekend1');
+				var assetList = ['Nene_Hair_Blowing'];
+
+				var texture:FlxAtlasFrames = Paths.getSparrowAtlas('Nene', 'weekend1');
+
+				if (texture == null)
+				{
+				trace('Multi-Sparrow atlas could not load PRIMARY texture: Nene');
+				}
+				else
+				{
+				trace('Creating multi-sparrow atlas: Nene');
+				texture.parent.destroyOnNoUse = false;
+				}
+
+				for (asset in assetList)
+				{
+				var subTexture:FlxAtlasFrames = Paths.getSparrowAtlas(asset, 'weekend1');
+				// If we don't do this, the unused textures will be removed as soon as they're loaded.
+
+				if (subTexture == null)
+				{
+				trace('Multi-Sparrow atlas could not load subtexture: ${asset}');
+				}
+				else
+				{
+				trace('Concatenating multi-sparrow atlas: ${asset}');
+				subTexture.parent.destroyOnNoUse = false;
+				}
+
+				texture.addAtlas(subTexture);
+				}
+
+				frames = texture;
+
 				animation.addByPrefix('idle', 'Idle0', 24, false);
 				animation.addByIndices('danceLeft', 'Idle0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 				animation.addByIndices('danceRight', 'Idle0', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
@@ -258,6 +311,10 @@ animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 				animation.addByPrefix('raiseKnife', 'KnifeRaise0', 24, false);
 				animation.addByPrefix('idleKnife', 'KnifeIdle0', 24, false);
 				animation.addByPrefix('lowerKnife', 'KnifeLower0', 24, false);
+				animation.addByIndices('hairBlowNormal', 'HairBlow0', [0, 1, 2, 3, 0, 1, 2, 3], "", 24, false);
+				animation.addByIndices('hairFallNormal', 'HairBlow0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "", 24, false);
+				animation.addByIndices('hairBlowKnife', 'HairBlowKnife0', [0, 1, 2, 3, 0, 1, 2, 3], "", 24, false);
+				animation.addByIndices('hairFallKnife', 'HairBlowKnife0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 
 				addOffset('danceLeft');
 				addOffset('danceRight');
@@ -268,6 +325,10 @@ animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 				addOffset('raiseKnife', 0, 52);
 				addOffset('idleKnife', -99, 52);
 				addOffset('lowerKnife', 135, 52);
+				addOffset('hairBlowNormal', 0, 0);
+				addOffset('hairFallNormal', 0, 0);
+				addOffset('hairBlowKnife', -79, 51);
+				addOffset('hairFallKnife', -79, 51);
 
 				playAnim('danceRight');
 
