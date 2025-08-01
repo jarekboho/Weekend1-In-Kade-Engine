@@ -413,12 +413,11 @@ class RainShader extends FlxShader
 		return spriteMode = value;
 	}
 
-	public var uRainColor(default, set):FlxColor;
+	public var RainColor(default, set):FlxColor;
 
-	function set_uRainColor(value:FlxColor):FlxColor {
-		uRainColor = value;
-		shader.uIntensity.value = [value.redFloat, value.greenFloat, value.blueFloat];
-		return value;
+	function set_RainColor(value:FlxColor):FlxColor {
+		this.uRainColor.value = [value.redFloat, value.greenFloat, value.blueFloat];
+		return RainColor = value;
 	}
 
 	// The scale of the rain depends on the world coordinate system, so higher resolution makes
@@ -504,7 +503,7 @@ class RainShader extends FlxShader
 		this.uCameraBounds.value = [0, 0, FlxG.width, FlxG.height];
 		this.uSpriteMode.value = [false];
 		this.uFrameBounds.value = [0, 0, FlxG.width, FlxG.height];
-		this.uRainColor = 0xFF6680CC;
+		this.RainColor = 0xFF6680CC;
 	}
 
 	public function update(elapsed:Float):Void
