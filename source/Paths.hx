@@ -133,11 +133,6 @@ class Paths
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
 	}
 
-	inline static public function getTextureAtlas(key:String)
-	{
-		return 'assets/images/$key';
-	}
-
 	inline static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String
 	{
 		var path:String = 'assets/' + key;
