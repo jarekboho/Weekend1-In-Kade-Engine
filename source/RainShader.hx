@@ -536,10 +536,10 @@ class RainShader extends FlxShader
 	public function updateViewInfo(screenWidth:Float, screenHeight:Float, camera:FlxCamera):Void
 	{
 		uScreenResolution.value = [screenWidth, screenHeight];
-var camerax = 0.5 * camera.width * (camera.scaleX - camera.initialZoom) / camera.scaleX;
-var cameray = 0.5 * camera.height * (camera.scaleY - camera.initialZoom) / camera.scaleY;
-var camerax2 = camera.width - camerax;
-var cameray2 = camera.height - cameray;
+		var camerax = 0.5 * camera.width * (camera.scaleX - camera.initialZoom) / camera.scaleX;
+		var cameray = 0.5 * camera.height * (camera.scaleY - camera.initialZoom) / camera.scaleY;
+		var camerax2 = camera.width - camerax;
+		var cameray2 = camera.height - cameray;
 		uCameraBounds.value = [camera.scroll.x + camerax, camera.scroll.y + cameray, camera.scroll.x + camerax2, camera.scroll.y + cameray2];
 	}
   
