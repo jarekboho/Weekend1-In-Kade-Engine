@@ -7,6 +7,7 @@ import openfl.display.ShaderParameterType;
 import openfl.utils.Assets;
 import flixel.FlxCamera;
 import flixel.FlxG;
+import flixel.graphics.frames.FlxFrame;
 
 typedef Light =
 {
@@ -40,6 +41,8 @@ class RainShader extends FlxShader
   
 		  // equals (camera.viewLeft, camera.viewTop, camera.viewRight, camera.viewBottom)
 		  uniform vec4 uCameraBounds;
+
+		  uniform vec4 uFrameBounds;
   
 		  // screen coord -> world coord conversion
 		  // returns world coord in px
@@ -64,6 +67,25 @@ class RainShader extends FlxShader
 			  vec2 offset = vec2(left, top);
 			  return (worldCoord - offset) / scale;
 		  }
+
+		// screen coord -> frame coord conversion
+		// returns normalized frame coord
+		vec2 screenToFrame(vec2 screenCoord) {
+			float left = uFrameBounds.x;
+			float top = uFrameBounds.y;
+			float right = uFrameBounds.z;
+			float bottom = uFrameBounds.w;
+			float width = right - left;
+			float height = bottom - top;
+
+			float clampedX = clamp(screenCoord.x, left, right);
+			float clampedY = clamp(screenCoord.y, top, bottom);
+
+			return vec2(
+				(clampedX - left) / (width),
+				(clampedY - top) / (height)
+			);
+		}
   
 		  // internally used to get the maximum `openfl_TextureCoordv`
 		  vec2 bitmapCoordScale() {
@@ -212,6 +234,10 @@ class RainShader extends FlxShader
 			uniform sampler2D uLightMap;
 			uniform int numLights;
 
+			uniform bool uSpriteMode;
+
+			uniform vec3 uRainColor;
+
 			const int MAX_LIGHTS = 8;
 			UNIFORM Light lights[MAX_LIGHTS];
 
@@ -306,6 +332,7 @@ class RainShader extends FlxShader
 
 			void main() {
 				vec2 wpos = screenToWorld(screenCoord);
+				if (uSpriteMode) wpos = screenToWorld(screenToFrame(openfl_TextureCoordv));
 				vec2 origWpos = wpos;
 				float intensity = uIntensity;
 
@@ -334,6 +361,10 @@ class RainShader extends FlxShader
 				//vec3 light = (texture2D(uLightMap, screenCoord).xyz + lightUp(wpos)) * intensity;
 
 				vec3 color = sampleBitmapWorld(wpos).xyz;
+				if (uSpriteMode) {
+					vec2 rwpos = worldToScreen(wpos - origWpos);
+					color = flixel_texture2D(bitmap, openfl_TextureCoordv + rwpos).xyz;
+				}
 
 				/*
 				bool isPuddle = texture2D(uMask, screenCoord).x > 0.5;
@@ -346,9 +377,8 @@ class RainShader extends FlxShader
 				}
 				*/
 
-				vec3 rainColor = vec3(0.4, 0.5, 0.8);
 				color += add;
-				color = mix(color, rainColor, 0.1 * rainSum);
+				color = mix(color, uRainColor, 0.1 * rainSum);
 
 				// vec3 fog = light * (0.5 + rainSum * 0.5);
 				// color = color / (1.0 + fog) + fog;
@@ -372,6 +402,22 @@ class RainShader extends FlxShader
 	{
 		this.uTime.value[0] = value;
 		return time = value;
+	}
+
+	public var spriteMode(default, set):Bool = false;
+
+	function set_spriteMode(value:Bool):Bool
+	{
+		this.uSpriteMode.value = [value];
+		return spriteMode = value;
+	}
+
+	public var uRainColor(default, set):FlxColor;
+
+	function set_uRainColor(value:FlxColor):FlxColor {
+		uRainColor = value;
+		shader.uIntensity.value = [value.redFloat, value.greenFloat, value.blueFloat];
+		return value;
 	}
 
 	// The scale of the rain depends on the world coordinate system, so higher resolution makes
@@ -455,6 +501,9 @@ class RainShader extends FlxShader
 		this.numLights.value = [0];
 		this.uScreenResolution.value = [FlxG.width, FlxG.height];
 		this.uCameraBounds.value = [0, 0, FlxG.width, FlxG.height];
+		this.uSpriteMode.value = [false];
+		this.uFrameBounds.value = [0, 0, FlxG.width, FlxG.height];
+		this.uRainColor = 0xFF6680CC;
 	}
 
 	public function update(elapsed:Float):Void
@@ -477,6 +526,12 @@ class RainShader extends FlxShader
 			];
 		}
 	}*/
+
+	public function updateFrameInfo(frame:FlxFrame)
+	{
+		// NOTE: uv.width is actually the right pos and uv.height is the bottom pos
+		uFrameBounds.value = [frame.uv.x, frame.uv.y, frame.uv.width, frame.uv.height];
+	}
 
 	public function updateViewInfo(screenWidth:Float, screenHeight:Float, camera:FlxCamera):Void
 	{
