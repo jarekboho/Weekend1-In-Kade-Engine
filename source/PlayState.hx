@@ -692,20 +692,31 @@ class PlayState extends MusicBeatState
 		switch (curStage)
 		{
 			case 'phillyStreets':
-				boyfriend.x = 2151 - boyfriend.characterOrigin.x + boyfriend.globalOffsets[0];
-				boyfriend.y = 1228 - boyfriend.characterOrigin.y + boyfriend.globalOffsets[1];
-				dad.x = 920 - dad.characterOrigin.x + dad.globalOffsets[0];
-				dad.y = 1310 - dad.characterOrigin.y + dad.globalOffsets[1];
-				gf.x = 1453 - gf.characterOrigin.x + gf.globalOffsets[0];
-				gf.y = 1100 - gf.characterOrigin.y + gf.globalOffsets[1];
+				boyfriend.x = 2151 - boyfriend.characterOrigin.x;
+				boyfriend.y = 1228 - boyfriend.characterOrigin.y;
+				dad.x = 920 - dad.characterOrigin.x;
+				dad.y = 1310 - dad.characterOrigin.y;
+				gf.x = 1453 - gf.characterOrigin.x;
+				gf.y = 1100 - gf.characterOrigin.y;
 			case 'phillyBlazin':
 				boyfriend.x = -237 - boyfriend.characterOrigin.x;
 				boyfriend.y = 100 - boyfriend.characterOrigin.y;
 				dad.x = -237 - dad.characterOrigin.x;
 				dad.y = 150 - dad.characterOrigin.y;
-				gf.x = 1353 - gf.characterOrigin.x + gf.globalOffsets[0];
-				gf.y = 1125 - gf.characterOrigin.y + gf.globalOffsets[1];
+				gf.x = 1353 - gf.characterOrigin.x;
+				gf.y = 1125 - gf.characterOrigin.y;
 		}
+
+		boyfriend.originalPosition.set(boyfriend.x, boyfriend.y);
+		dad.originalPosition.set(dad.x, dad.y);
+		gf.originalPosition.set(gf.x, gf.y);
+
+		boyfriend.x += boyfriend.globalOffsets[0];
+		boyfriend.y += boyfriend.globalOffsets[1];
+		dad.x += dad.globalOffsets[0];
+		dad.y += dad.globalOffsets[1];
+		gf.x += gf.globalOffsets[0];
+		gf.y += gf.globalOffsets[1];
 
 		boyfriend.resetCameraFocusPoint();
 		dad.resetCameraFocusPoint();
