@@ -245,7 +245,6 @@ new FlxTimer().start(1.25, function(tmr){afterPicoDeathGutPunchIntro();});
 		deathSpriteRetry = new FlxSprite(0, 0);
 		deathSpriteRetry.frames = Paths.getSparrowAtlas("Pico_Death_Retry", 'weekend1');
 
-		// week 3 shader
 		if (bf.shader != null)
 		{
 		deathSpriteRetry.shader = bf.shader;
