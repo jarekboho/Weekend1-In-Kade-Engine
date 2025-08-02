@@ -1987,11 +1987,13 @@ add(groupBlazin);
 			var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 0, FlxG.sound.music.length, rainShaderStartIntensity, rainShaderEndIntensity);
 			rainShader.intensity = remappedIntensityValue;
 			rainShader.updateViewInfo(FlxG.width, FlxG.height, FlxG.camera);
+			rainShader.update(elapsed);
 			}
 			else
 			{
 			rainShader.intensity = rainShaderStartIntensity;
 			rainShader.updateViewInfo(FlxG.width, FlxG.height, FlxG.camera);
+			rainShader.update(elapsed);
 			}
 		}
 
