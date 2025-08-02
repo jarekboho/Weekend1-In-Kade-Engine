@@ -1982,10 +1982,17 @@ add(groupBlazin);
 
 		if(rainShader != null)
 		{
-var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 0, (FlxG.sound.music != null ? FlxG.sound.music.length : 0), rainShaderStartIntensity, rainShaderEndIntensity);
+			if (FlxG.sound.music != null)
+			{
+			var remappedIntensityValue:Float = FlxMath.remapToRange(Conductor.songPosition, 0, FlxG.sound.music.length, rainShaderStartIntensity, rainShaderEndIntensity);
 			rainShader.intensity = remappedIntensityValue;
 			rainShader.updateViewInfo(FlxG.width, FlxG.height, FlxG.camera);
-			rainShader.update(elapsed);
+			}
+			else
+			{
+			rainShader.intensity = rainShaderStartIntensity;
+			rainShader.updateViewInfo(FlxG.width, FlxG.height, FlxG.camera);
+			}
 		}
 
 		if(cutsceneConductor != null && cutsceneMusic != null)
