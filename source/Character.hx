@@ -35,6 +35,8 @@ class Character extends FlxSprite
 
 	public var animationFinished:Bool = false;
 
+	public var originalPosition:FlxPoint = new FlxPoint(0, 0);
+
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
 	{
 		super(x, y);
