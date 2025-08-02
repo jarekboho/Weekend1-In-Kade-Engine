@@ -12,12 +12,15 @@ class HealthIcon extends FlxSprite
 		
 		loadGraphic(Paths.image('iconGrid'), true, 150, 150);
 
-		animation.add('bf', [6, 7], 0, false, isPlayer);
-		animation.add('dad', [8, 9], 0, false, isPlayer);
-		animation.add('bf-old', [4, 5], 0, false, isPlayer);
-		animation.add('darnell', [0, 1], 0, false, isPlayer);
+		animation.add('bf', [0, 1], 0, false, isPlayer);
+		animation.add('face', [4, 5], 0, false, isPlayer);
+		animation.add('dad', [6, 7], 0, false, isPlayer);
+		animation.add('bf-old', [8, 9], 0, false, isPlayer);
+		animation.add('gf', [10], 0, false, isPlayer);
+		animation.add('darnell', [11, 12], 0, false, isPlayer);
 		animation.add('pico-playable', [2, 3], 0, false, isPlayer);
-		animation.add('darnell-blazin', [0, 1], 0, false, isPlayer);
+		animation.add('nene', [4, 5], 0, false, isPlayer);
+		animation.add('darnell-blazin', [11, 12], 0, false, isPlayer);
 		animation.add('pico-blazin', [2, 3], 0, false, isPlayer);
 		animation.play(char);
 		antialiasing = true;
