@@ -142,7 +142,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'darnell' | 'darnell-blazin':
-				frames = Paths.getSparrowAtlas('darnell','weekend1');
+				frames = Paths.getSparrowAtlas('darnell', 'weekend1');
 				animation.addByPrefix('idle', 'Idle0', 24, false);
 				animation.addByPrefix('singLEFT', 'Pose Left0', 24, false);
 				animation.addByPrefix('singDOWN', 'Pose Down0', 24, false);
