@@ -1430,9 +1430,9 @@ add(groupBlazin);
 			songPosBar.cameras = [camHUD];
 			songName.cameras = [camHUD];
 		}
-		
+
 		allowedToHeadbang = false;
-		
+
 		#if windows
 		DiscordClient.changePresence(detailsText + " " + SONG.song + " (" + storyDifficultyText + ") " + generateRanking(), "\nAcc: " + truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
 		#end
