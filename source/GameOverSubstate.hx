@@ -245,6 +245,11 @@ new FlxTimer().start(1.25, function(tmr){afterPicoDeathGutPunchIntro();});
 		deathSpriteRetry = new FlxSprite(0, 0);
 		deathSpriteRetry.frames = Paths.getSparrowAtlas("Pico_Death_Retry", 'weekend1');
 
+		// week 3 shader
+		if (bf.shader != null)
+		{
+		deathSpriteRetry.shader = bf.shader;
+		}
 		deathSpriteRetry.animation.addByPrefix('idle', "Retry Text Loop0", 24, true);
 		deathSpriteRetry.animation.addByPrefix('confirm', "Retry Text Confirm0", 24, false);
 
@@ -268,21 +273,21 @@ new FlxTimer().start(1.25, function(tmr){afterPicoDeathGutPunchIntro();});
 		}
 	}
 
-  public static function lerp(base:Float, target:Float, progress:Float):Float
-  {
-    return base + progress * (target - base);
-  }
+	public static function lerp(base:Float, target:Float, progress:Float):Float
+	{
+		return base + progress * (target - base);
+	}
 
-  public static function smoothLerp(current:Float, target:Float, elapsed:Float, duration:Float, precision:Float = 1 / 100):Float
-  {
-    if (current == target) return target;
+	public static function smoothLerp(current:Float, target:Float, elapsed:Float, duration:Float, precision:Float = 1 / 100):Float
+	{
+		if (current == target) return target;
 
-    var result:Float = lerp(current, target, 1 - Math.pow(precision, elapsed / duration));
+		var result:Float = lerp(current, target, 1 - Math.pow(precision, elapsed / duration));
 
-    if (Math.abs(result - target) < (precision * target)) result = target;
+		if (Math.abs(result - target) < (precision * target)) result = target;
 
-    return result;
-  }
+		return result;
+	}
 
 	function doDeathConfirm():Void {
 		var picoDeathConfirm:FlxSprite = new FlxSprite(picoBlazin.x + 1045, picoBlazin.y + 1214);
