@@ -252,8 +252,12 @@ new FlxTimer().start(1.25, function(tmr){afterPicoDeathGutPunchIntro();});
 
 		deathSpriteNene = new FlxSprite(0, 0);
 		deathSpriteNene.frames = Paths.getSparrowAtlas("NeneKnifeToss", 'weekend1');
-		deathSpriteNene.x = 1342.5;
-		deathSpriteNene.y = 424;
+		var playState = cast(FlxG.state, PlayState);
+		@:privateAccess
+		{
+		deathSpriteNene.x = playState.gf.originalPosition.x + 120;
+		deathSpriteNene.y = playState.gf.originalPosition.y - 200;
+		}
 		deathSpriteNene.origin.x = 172;
 		deathSpriteNene.origin.y = 205;
 		deathSpriteNene.animation.addByPrefix('throw', "knife toss0", 24, false);
