@@ -601,8 +601,8 @@ class PlayState extends MusicBeatState
 			curStage = 'phillyBlazin';
 			currentCameraZoom = 0.75;
 
-			scrollingSky = new FlxTiledSprite(Paths.image('phillyBlazin/skyBlur', 'weekend1'), 2000, 359, true, false);
-			scrollingSky.setPosition(-500, -120);
+			scrollingSky = new FlxTiledSprite(Paths.image('phillyBlazin/skyBlur', 'weekend1'), 4000, 495, true, false);
+			scrollingSky.setPosition(-700, -120);
 			scrollingSky.scrollFactor.set(0, 0);
 			add(scrollingSky);
 
