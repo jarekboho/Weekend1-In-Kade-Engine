@@ -6,7 +6,6 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
 import flxanimate.FlxAnimate;
 import sys.io.File;
-import sys.FileSystem;
 
 class Paths
 {
