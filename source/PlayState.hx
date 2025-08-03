@@ -2523,7 +2523,6 @@ add(groupBlazin);
 		}
 	}
 
-
 	var endingSong:Bool = false;
 
 	var hits:Array<Float> = [];
