@@ -90,11 +90,11 @@ class Character extends FlxSprite
 				// DAD ANIMATION LOADING CODE
 				tex = Paths.getSparrowAtlas('daddyDearest','shared');
 				frames = tex;
-				animation.addByPrefix('idle', 'Dad idle dance', 24);
-				animation.addByPrefix('singUP', 'Dad Sing Note UP', 24);
-				animation.addByPrefix('singRIGHT', 'Dad Sing Note RIGHT', 24);
-				animation.addByPrefix('singDOWN', 'Dad Sing Note DOWN', 24);
-				animation.addByPrefix('singLEFT', 'Dad Sing Note LEFT', 24);
+				animation.addByPrefix('idle', 'idle', 24);
+				animation.addByPrefix('singUP', 'singUP', 24);
+				animation.addByPrefix('singRIGHT', 'singRIGHT', 24);
+				animation.addByPrefix('singDOWN', 'singDOWN', 24);
+				animation.addByPrefix('singLEFT', 'singLEFT', 24);
 
 				addOffset('idle');
 				addOffset("singUP", -6, 50);
@@ -364,8 +364,6 @@ animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 
 	override function update(elapsed:Float)
 	{
-		if(animation.curAnim != null)
-		{
 		if (!curCharacter.startsWith('bf') && curCharacter != 'pico-playable' && curCharacter != 'pico-blazin')
 		{
 			if (animation.curAnim.name.startsWith('sing'))
@@ -381,7 +379,6 @@ animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 				holdTimer = 0;
 			}
 		}
-		}
 
 		switch (curCharacter)
 		{
@@ -390,14 +387,11 @@ animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 					playAnim('danceRight');
 		}
 
-		if(animation.curAnim != null)
-		{
 		if (animation.curAnim.finished)
 		{
 		if (!canPlayOtherAnims && !debugMode)
 		{
 		canPlayOtherAnims = true;
-		}
 		}
 		}
 
