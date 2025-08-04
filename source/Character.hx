@@ -364,6 +364,8 @@ animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 
 	override function update(elapsed:Float)
 	{
+		if(animation.curAnim != null)
+		{
 		if (!curCharacter.startsWith('bf') && curCharacter != 'pico-playable' && curCharacter != 'pico-blazin')
 		{
 			if (animation.curAnim.name.startsWith('sing'))
@@ -379,6 +381,7 @@ animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 				holdTimer = 0;
 			}
 		}
+		}
 
 		switch (curCharacter)
 		{
@@ -387,11 +390,14 @@ animation.addByIndices('laughCutscene', 'Laugh0', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 					playAnim('danceRight');
 		}
 
+		if(animation.curAnim != null)
+		{
 		if (animation.curAnim.finished)
 		{
 		if (!canPlayOtherAnims && !debugMode)
 		{
 		canPlayOtherAnims = true;
+		}
 		}
 		}
 
