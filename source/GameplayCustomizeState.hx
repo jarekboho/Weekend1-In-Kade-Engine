@@ -33,6 +33,7 @@ class GameplayCustomizeState extends MusicBeatState
     
     public override function create() {
         #if windows
+		// Updating Discord Rich Presence
 		DiscordClient.changePresence("Customizing Gameplay", null);
 		#end
 
@@ -69,6 +70,7 @@ class GameplayCustomizeState extends MusicBeatState
 		add(camFollow);
 
 		FlxG.camera.follow(camFollow, LOCKON, 0.01);
+		// FlxG.camera.setScrollBounds(0, FlxG.width, 0, FlxG.height);
 		FlxG.camera.zoom = 0.9;
 		FlxG.camera.focusOn(camFollow.getPosition());
 
@@ -90,7 +92,6 @@ class GameplayCustomizeState extends MusicBeatState
 		generateStaticArrows(0);
 		generateStaticArrows(1);
 
-        
         if (!FlxG.save.data.changedHit)
         {
             FlxG.save.data.changedHitX = defaultX;
@@ -133,7 +134,6 @@ class GameplayCustomizeState extends MusicBeatState
             FlxG.sound.play(Paths.sound('cancelMenu'));
 			FlxG.switchState(new OptionsMenu());
         }
-
     }
 
     override function beatHit() 
@@ -148,11 +148,14 @@ class GameplayCustomizeState extends MusicBeatState
 
         trace('beat');
     }
+
+    // ripped from play state cuz im lazy
     
 	private function generateStaticArrows(player:Int):Void
         {
             for (i in 0...4)
             {
+                // FlxG.log.add(i);
                 var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
                 babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets', 'shared');
                 babyArrow.animation.addByPrefix('green', 'arrowUP');
