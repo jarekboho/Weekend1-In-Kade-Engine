@@ -313,7 +313,7 @@ class FlxAnimate extends FlxSprite
 		    }
 			
 			matrix.translate(_point.x, _point.y);
-			camera.drawPixels(limb, null, matrix, colorTransform, blend, antialiasing);
+			camera.drawPixels(limb, null, matrix, colorTransform, blend, antialiasing, shader);
 			#if FLX_DEBUG
 			FlxBasic.visibleCount++;
 			#end
