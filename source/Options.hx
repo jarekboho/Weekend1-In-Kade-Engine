@@ -159,8 +159,6 @@ class SongPositionOption extends Option
 
 class Judgement extends Option
 {
-	
-
 	public function new(desc:String)
 	{
 		super();
@@ -323,7 +321,6 @@ class ScrollSpeedOption extends Option
 		if (FlxG.save.data.scrollSpeed > 10)
 			FlxG.save.data.scrollSpeed = 10;
 
-
 		OptionsMenu.versionShit.text = "Current Scroll Speed: " + OptionsMenu.truncateFloat(FlxG.save.data.scrollSpeed,1) + " - Description - " + description;
 		return true;
 	}
@@ -469,9 +466,9 @@ class OffsetMenu extends Option
 	public override function press():Bool
 	{
 		trace("switch");
-		var poop:String = Highscore.formatSong("Tutorial", 1);
+		var poop:String = Highscore.formatSong("Darnell", 1);
 
-		PlayState.SONG = Song.loadFromJson(poop, "Tutorial");
+		PlayState.SONG = Song.loadFromJson(poop, "Darnell");
 		PlayState.isStoryMode = false;
 		PlayState.storyDifficulty = 0;
 		PlayState.storyWeek = 0;
