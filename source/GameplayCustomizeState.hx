@@ -189,18 +189,18 @@ class GameplayCustomizeState extends MusicBeatState
                 }
                 babyArrow.updateHitbox();
                 babyArrow.scrollFactor.set();
-    
+
                 babyArrow.ID = i;
-    
+
                 if (player == 1)
                 {
                     playerStrums.add(babyArrow);
                 }
-    
+
                 babyArrow.animation.play('static');
                 babyArrow.x += 50;
                 babyArrow.x += ((FlxG.width / 2) * player);
-    
+
                 strumLineNotes.add(babyArrow);
             }
         }
