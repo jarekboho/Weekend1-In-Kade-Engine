@@ -43,7 +43,7 @@ class Replay
     {
         this.path = path;
         replay = {
-            songName: "Tutorial", 
+            songName: "Darnell", 
             songDiff: 1, 
             keyPresses: [],
             keyReleases: [],
@@ -97,5 +97,4 @@ class Replay
         }
         #end
     }
-
 }
