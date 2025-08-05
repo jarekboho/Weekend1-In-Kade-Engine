@@ -9,9 +9,9 @@ using StringTools;
 
 typedef SongEventDataRaw =
 {
-	var t:Float;	//Strum time
-	var e:String;	//Event name
-	var v:Dynamic;	//Values
+	var t:Float;
+	var e:String;
+	var v:Dynamic;
 }
 
 class SongEventData
