@@ -49,6 +49,11 @@ class GameOverSubstate extends MusicBeatSubstate
 		bf.updateHitbox();
 		}
 
+		var playState = cast(FlxG.state, PlayState);
+
+		@:privateAccess
+		targetCameraZoom = playState.stageZoom;
+
 if(daStage == 'phillyBlazin')
 {
 picoBlazin = new FlxAnimate(0, 0);
@@ -87,11 +92,11 @@ picoBlazin.offset.y = -235.305951031018;
 picoBlazin.origin.x = 0;
 picoBlazin.origin.y = 0;
 
-targetCameraZoom = FlxG.camera.zoom * 0.8;
+@:privateAccess
+targetCameraZoom = playState.stageZoom * 0.8;
 new FlxTimer().start(1.25, function(tmr){afterPicoDeathGutPunchIntro();});
 }
 
-		var playState = cast(FlxG.state, PlayState);
 		@:privateAccess
 		camFollow = new FlxObject(playState.camFollow.x, playState.camFollow.y, 1, 1);
 		if(picoBlazin != null)
@@ -154,7 +159,6 @@ new FlxTimer().start(1.25, function(tmr){afterPicoDeathGutPunchIntro();});
 		if(picoDeathExplosion.anim.finished)
 		onExplosionFinishAnim(picoDeathExplosion.anim.curSymbol.name);
 
-		if(targetCameraZoom != 1.0)
 		FlxG.camera.zoom = smoothLerp(FlxG.camera.zoom, targetCameraZoom, elapsed, CAMERA_ZOOM_DURATION);
 
 		if (controls.ACCEPT)
