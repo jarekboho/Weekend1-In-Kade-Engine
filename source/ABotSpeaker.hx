@@ -75,6 +75,7 @@ class ABotSpeaker extends FlxTypedSpriteGroup<FlxSprite>
 		eyes.anim.curInstance.matrix.tx = 562.9;
 		eyes.anim.curInstance.matrix.ty = 731.2;
 		eyes.anim.curFrame = eyes.anim.length - 1;
+		eyes.antialiasing = true;
 		add(eyes);
 
 		speaker = new FlxAnimate(-100, 216);
