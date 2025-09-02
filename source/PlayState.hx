@@ -143,9 +143,9 @@ class PlayState extends MusicBeatState
 
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
-	private var camCutscene:FlxCamera;
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
+	private var camCutscene:FlxCamera;
 
 	public static var offsetTesting:Bool = false;
 
