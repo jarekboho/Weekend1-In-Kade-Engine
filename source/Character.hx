@@ -248,8 +248,8 @@ animation.addByIndices('burpSmileLong', 'burpsmile', [0, 1, 2, 3, 4, 5, 6, 7, 8,
 				addOffset("firstDeath", 225, 125);
 				addOffset("firstDeathExplosion", 225, 125);
 				addOffset("deathLoop", 225, 125);
-				addOffset("cock", 0, 0);
-				addOffset("shoot", 300, 250);
+				addOffset("cock", 30, -8);
+				addOffset("shoot", 330, 232);
 				addOffset("intro1", 60, 0);
 				addOffset("cockCutscene", 0, 0);
 				addOffset("intro2", 260, 230);
@@ -257,8 +257,8 @@ animation.addByIndices('burpSmileLong', 'burpsmile', [0, 1, 2, 3, 4, 5, 6, 7, 8,
 				addOffset("singDOWN-censor", 84, -77);
 				addOffset("singUP-censor", 21, 28);
 				addOffset("singLEFT-censor", 84, -11);
-				addOffset("hey", 0, 0);
-				addOffset("cheer", 0, 0);
+				addOffset("hey", 36, 0);
+				addOffset("cheer", 62, 23);
 				addOffset("burpShit", 33, -3);
 				addOffset("burpSmile", 33, -3);
 				addOffset("burpSmileLong", 33, -3);
