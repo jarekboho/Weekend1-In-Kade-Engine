@@ -1026,7 +1026,7 @@ add(groupBlazin);
 			{
 				case "darnell":
 					trace('Pausing countdown to play a video cutscene (`darnell`)');
-					FlxG.camera.zoom  = 1.3;
+					tweenCameraZoom(1.3, 0, true);
 					bgSprite = new FlxSprite(0, 0).makeGraphic(2000, 2500, 0xFF000000);
 					bgSprite.cameras = [camCutscene];
 					add(bgSprite);
