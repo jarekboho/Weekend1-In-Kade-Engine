@@ -242,6 +242,8 @@ class PlayState extends MusicBeatState
 
 	var cameraZoomRate:Int = 4;
 
+	var cameraZoomRateOffset:Int = 0;
+
 	function callLua(func_name : String, args : Array<Dynamic>, ?type : String) : Dynamic
 	{
 		var result : Any = null;
@@ -3410,7 +3412,7 @@ add(groupBlazin);
 		}
 
 		// Only bop camera if zoom level is below 135%
-		if (FlxG.camera.zoom < (1.35 * FlxCamera.defaultZoom) && cameraZoomRate > 0 && curBeat % cameraZoomRate == 0)
+		if (FlxG.camera.zoom < (1.35 * FlxCamera.defaultZoom) && cameraZoomRate > 0 && (curBeat + cameraZoomRateOffset) % cameraZoomRate == 0)
 		{
 			// Set zoom multiplier for camera bop.
 			cameraBopMultiplier = cameraBopIntensity;
