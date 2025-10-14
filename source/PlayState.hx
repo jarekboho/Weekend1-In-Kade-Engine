@@ -3993,16 +3993,9 @@ add(groupBlazin);
 
 	function onAnimationFinished(name:String) {
 		switch(gf.currentState) {
-			case 2:
-				if (name == "raiseKnife") {
+			case 2, 4:
 					gf.animationFinished = true;
 					transitionState();
-				}
-			case 4:
-				if (name == "lowerKnife") {
-					gf.animationFinished = true;
-					transitionState();
-				}
 			default:
 		}
 	}
